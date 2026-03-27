@@ -1,0 +1,62 @@
+---
+type: RCA
+title: "Vulnerability Research: Target / Component Name"
+date: 2026-03-27
+draft: true
+authors:
+  - name: Your Name
+summary: "Brief description of the research target, methodology, and key findings."
+tags: [vulnerability-research, attack-surface]
+references:
+  - id: ref-1
+    title: "Reference Title"
+    authors: "Author Names"
+    year: "2026"
+    url: "https://example.com"
+---
+
+import Sidenote from '../../components/Sidenote.astro';
+
+<div class="abstract">
+What target did you research? What was your hypothesis going in? What did you find? 2-4 sentences.
+</div>
+
+## Target Overview
+
+<p id="p1">Describe the target — what it is, what it does, why it's interesting from a security perspective.<Sidenote id="s1" anchor="p1" num="1">Prior work, advisories, or known attack surface.</Sidenote></p>
+
+## Attack Surface Analysis
+
+Map the attack surface. What inputs does it accept? What trust boundaries exist? Where are the interesting seams?
+
+- **Entry point 1:** Description
+- **Entry point 2:** Description
+- **Entry point 3:** Description
+
+## Methodology
+
+What approach did you take? Static analysis, fuzzing, manual review, differential testing?
+
+```
+// Tool output, fuzzer configs, or instrumentation snippets
+```
+
+## Findings
+
+<p id="p2">Describe what you found. Even negative results are worth documenting — what you expected to find but didn't, and why.<Sidenote id="s2" anchor="p2" num="2">Assumptions that were invalidated or confirmed.</Sidenote></p>
+
+### Finding 1: Title
+
+- **Severity:** Low / Medium / High / Critical / Informational
+- **Component:** Affected component
+- **Status:** Reported / Patched / Won't Fix / Investigating
+
+Description of the finding. Include PoC or reproduction steps if applicable.
+
+### Finding 2: Title
+
+Repeat as needed.
+
+## Open Questions
+
+What's left to explore? What would you do with more time? What assumptions haven't been tested yet?
