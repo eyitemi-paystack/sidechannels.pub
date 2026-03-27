@@ -8,6 +8,8 @@ interface Props {
     type: string;
     title: string;
     date: Date;
+    lastUpdated?: Date;
+    changelog?: { date: Date; description: string }[];
     authors: { name: string; affiliation?: string }[];
     summary: string;
     tags?: string[];
@@ -116,12 +118,40 @@ const tocItems = headings.filter(h => h.depth <= 3);
           <span class="opacity-30">·</span>
           <span class="text-black font-bold">{frontmatter.type}</span>
         </div>
+        {frontmatter.lastUpdated && (
+          <div class="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-gray-400">
+            Updated <time datetime={frontmatter.lastUpdated instanceof Date ? frontmatter.lastUpdated.toISOString().split('T')[0] : String(frontmatter.lastUpdated)}>
+              {frontmatter.lastUpdated instanceof Date ? frontmatter.lastUpdated.toISOString().split('T')[0] : String(frontmatter.lastUpdated)}
+            </time>
+          </div>
+        )}
       </div>
 
       <!-- Article body -->
       <article id="main-content" class="prose-article">
         <slot />
       </article>
+
+      <!-- Changelog -->
+      {(frontmatter.changelog?.length ?? 0) > 0 && (
+        <section class="mt-24 pt-12 border-t border-gray-100" id="changelog">
+          <h2 class="font-mono text-[10px] uppercase tracking-[0.4em] mb-8 text-gray-400">Revision History</h2>
+          <div class="relative pl-6 border-l border-gray-200">
+            {frontmatter.changelog!.map(entry => {
+              const entryDate = entry.date instanceof Date ? entry.date.toISOString().split('T')[0] : String(entry.date);
+              return (
+                <div class="mb-6 relative">
+                  <div class="absolute -left-[1.56rem] top-1.5 w-2 h-2 rounded-full bg-gray-300"></div>
+                  <div class="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-gray-400 mb-1">
+                    <time datetime={entryDate}>{entryDate}</time>
+                  </div>
+                  <div class="text-[14px] text-gray-600 font-serif">{entry.description}</div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       <!-- Bibliography -->
       {(frontmatter.references?.length ?? 0) > 0 && (

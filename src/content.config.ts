@@ -4,9 +4,14 @@ import { glob } from 'astro/loaders';
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/posts' }),
   schema: z.object({
-    type: z.enum(['RCA', 'ESSAY', 'NOTE']),
+    type: z.enum(['RCA', 'ESSAY', 'NOTE', 'VULNRESEARCH']),
     title: z.string(),
     date: z.coerce.date(),
+    lastUpdated: z.coerce.date().optional(),
+    changelog: z.array(z.object({
+      date: z.coerce.date(),
+      description: z.string(),
+    })).default([]),
     authors: z.array(z.object({
       name: z.string(),
       affiliation: z.string().optional(),
