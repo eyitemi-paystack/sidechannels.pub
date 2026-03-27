@@ -5,10 +5,16 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  article?: {
+    publishedTime: string;
+    authors: string[];
+    tags: string[];
+  };
 }
 
-const { title, description = 'Experimental technical writing at the edge of security research.', ogImage } = Astro.props;
+const { title, description = 'Experimental technical writing at the edge of security research.', ogImage, article } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogType = article ? 'article' : 'website';
 ---
 
 <!doctype html>
@@ -17,24 +23,59 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
+  <meta name="author" content="sidechannels.pub" />
+  <meta name="generator" content={Astro.generator} />
 
   <!-- Open Graph -->
-  <meta property="og:type" content="website" />
+  <meta property="og:type" content={ogType} />
   <meta property="og:url" content={canonicalURL} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
+  <meta property="og:site_name" content="sidechannels.pub" />
   {ogImage && <meta property="og:image" content={new URL(ogImage, Astro.site)} />}
+  {article && <meta property="article:published_time" content={article.publishedTime} />}
+  {article?.authors.map(a => <meta property="article:author" content={a} />)}
+  {article?.tags.map(t => <meta property="article:tag" content={t} />)}
 
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
+  {ogImage && <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />}
 
   <link rel="canonical" href={canonicalURL} />
   <link rel="alternate" type="application/rss+xml" title="sidechannels.pub" href="/rss.xml" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
   <!-- KaTeX CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+
+  <!-- JSON-LD Structured Data -->
+  {article ? (
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": title,
+      "description": description,
+      "url": canonicalURL,
+      "datePublished": article.publishedTime,
+      "author": article.authors.map(name => ({ "@type": "Person", name })),
+      "publisher": {
+        "@type": "Organization",
+        "name": "sidechannels.pub",
+        "url": "https://sidechannels.pub"
+      },
+      "keywords": article.tags,
+    })} />
+  ) : (
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "sidechannels.pub",
+      "description": description,
+      "url": "https://sidechannels.pub",
+    })} />
+  )}
 
   <title>{title}</title>
 </head>
@@ -43,7 +84,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <slot />
 
   <script>
-    // Progress bar
     window.addEventListener('scroll', () => {
       const winScroll = document.documentElement.scrollTop;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;

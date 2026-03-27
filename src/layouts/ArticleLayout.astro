@@ -36,7 +36,15 @@ const bibtex = `@article{${firstAuthor.toLowerCase()}${year}${slug.split('-')[0]
 const tocItems = headings.filter(h => h.depth <= 3);
 ---
 
-<BaseLayout title={`${frontmatter.title} — sidechannels.pub`} description={frontmatter.summary}>
+<BaseLayout
+  title={`${frontmatter.title} — sidechannels.pub`}
+  description={frontmatter.summary}
+  article={{
+    publishedTime: dateStr,
+    authors: frontmatter.authors.map(a => a.name),
+    tags: frontmatter.tags || [],
+  }}
+>
   <Header showBack />
 
   <div class="article-grid pt-16 pb-32">
