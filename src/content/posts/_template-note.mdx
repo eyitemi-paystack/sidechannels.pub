@@ -1,0 +1,34 @@
+---
+type: NOTE
+title: "Note Title Goes Here"
+date: 2026-03-27
+draft: true
+authors:
+  - name: Your Name
+summary: "Brief description of what this note covers."
+tags: [topic-1, topic-2]
+references:
+  - id: ref-1
+    title: "Reference Title"
+    authors: "Author Names"
+    year: "2026"
+    url: "https://example.com"
+---
+
+import Sidenote from '../../components/Sidenote.astro';
+
+<div class="abstract">
+What is this note about? Notes are informal — observations, verification sketches, research fragments. 1-2 sentences.
+</div>
+
+## Section One
+
+<p id="p1">Write your observations.<Sidenote id="s1" anchor="p1" num="1">Additional context.</Sidenote></p>
+
+```
+// Code snippets, specs, logs — whatever supports the note
+```
+
+## Section Two
+
+Continue with more observations or findings.

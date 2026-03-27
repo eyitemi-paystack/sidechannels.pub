@@ -1,0 +1,45 @@
+---
+type: ESSAY
+title: "Essay Title Goes Here"
+date: 2026-03-27
+draft: true
+authors:
+  - name: Your Name
+    affiliation: Optional Affiliation
+summary: "One-paragraph summary of the thesis and what the reader will take away."
+tags: [topic-1, topic-2]
+references:
+  - id: ref-1
+    title: "Reference Title"
+    authors: "Author Names"
+    year: "2026"
+    url: "https://example.com"
+---
+
+import Sidenote from '../../components/Sidenote.astro';
+
+<div class="abstract">
+State your thesis. What question are you exploring? What's your hypothesis? Why does it matter? 2-4 sentences.
+</div>
+
+## Opening Section
+
+<p id="p1">Set up the problem or question.<Sidenote id="s1" anchor="p1" num="1">Background context or a contrary viewpoint worth noting.</Sidenote></p>
+
+> Use blockquotes for key claims or quotes you're responding to.
+
+## Analysis
+
+Develop your argument. Use math if needed:
+
+$$E = mc^2$$
+
+<p id="p2">Continue the analysis.<Sidenote id="s2" anchor="p2" num="2">Supporting evidence or caveats.</Sidenote></p>
+
+## Implications
+
+What follows from your analysis? What should the reader reconsider?
+
+## Conclusion
+
+Restate the key insight. What's the open question?

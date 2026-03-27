@@ -1,0 +1,52 @@
+---
+type: RCA
+title: "Root Cause Analysis: CVE-YYYY-NNNNN (Short Description)"
+date: 2026-03-27
+draft: true
+authors:
+  - name: Your Name
+    affiliation: Optional Affiliation
+summary: "One-paragraph summary of the vulnerability, the root cause, and the impact."
+tags: [kernel, exploit, memory-safety]
+references:
+  - id: ref-1
+    title: "Reference Title"
+    authors: "Author Names"
+    year: "2026"
+    url: "https://example.com"
+rcaMetadata:
+  vendor: "Vendor Name"
+  product: "Product Name"
+  cveId: "CVE-YYYY-NNNNN"
+  reportDate: "2026-03-01"
+  patchDate: "2026-03-15"
+---
+
+import Sidenote from '../../components/Sidenote.astro';
+
+<div class="abstract">
+Write your abstract here. Summarize the vulnerability class, the root cause, exploitation path, and key takeaway. 2-4 sentences.
+</div>
+
+## The Vulnerability
+
+<p id="p1">Describe the vulnerability. What component is affected? What's the trigger?<Sidenote id="s1" anchor="p1" num="1">Add context, historical notes, or caveats as sidenotes.</Sidenote></p>
+
+## Root Cause Analysis
+
+<p id="p2">Trace the root cause. Walk through the code path, the race condition, the missing check, etc.<Sidenote id="s2" anchor="p2" num="2">Architectural context or design decisions that led to this.</Sidenote></p>
+
+```c
+// Include relevant code snippets
+void vulnerable_function() {
+    // annotate the critical section
+}
+```
+
+## Exploitation
+
+Describe the exploitation primitive and path from bug to impact.
+
+## Mitigation and Conclusion
+
+What was the fix? What should be done differently? What's the broader lesson?
