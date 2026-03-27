@@ -1,0 +1,18 @@
+---
+interface Props {
+  type?: 'quote' | 'note' | 'warning';
+}
+const { type = 'quote' } = Astro.props;
+
+const styles = {
+  quote: 'border-l-4 border-gray-900 pl-8 py-4 my-12',
+  note: 'bg-gray-50 border border-gray-100 p-8 my-12 rounded-sm',
+  warning: 'bg-amber-50 border border-amber-200 p-8 my-12 rounded-sm',
+};
+---
+
+<div class={`l-outset ${styles[type]}`}>
+  <div class={type === 'quote' ? 'text-xl italic font-serif text-black leading-relaxed' : 'text-[15px] text-gray-600 font-serif'}>
+    <slot />
+  </div>
+</div>

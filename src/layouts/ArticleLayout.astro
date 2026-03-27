@@ -1,0 +1,232 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  frontmatter: {
+    type: string;
+    title: string;
+    date: Date;
+    authors: { name: string; affiliation?: string }[];
+    summary: string;
+    tags?: string[];
+    references?: { id: string; title: string; authors: string; year: string; url?: string }[];
+    rcaMetadata?: { vendor: string; product: string; cveId: string; reportDate: string; patchDate?: string };
+  };
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { frontmatter, headings } = Astro.props;
+const dateStr = frontmatter.date instanceof Date
+  ? frontmatter.date.toISOString().split('T')[0]
+  : String(frontmatter.date);
+
+const firstAuthor = frontmatter.authors[0]?.name.split(' ').pop() || 'author';
+const year = dateStr.split('-')[0];
+const slug = Astro.url.pathname.split('/').filter(Boolean).pop() || 'post';
+
+const bibtex = `@article{${firstAuthor.toLowerCase()}${year}${slug.split('-')[0]},
+  title = {${frontmatter.title}},
+  author = {${frontmatter.authors.map(a => a.name).join(' and ')}},
+  year = {${year}},
+  url = {https://sidechannels.pub${Astro.url.pathname}}
+}`;
+
+const tocItems = headings.filter(h => h.depth <= 3);
+---
+
+<BaseLayout title={`${frontmatter.title} — sidechannels.pub`} description={frontmatter.summary}>
+  <Header showBack />
+
+  <div class="article-grid pt-16 pb-32">
+    <!-- TOC Sidebar (Left) -->
+    <aside class="toc-column hidden xl:block" aria-label="Table of Contents">
+      <div class="sticky-column space-y-12">
+        {frontmatter.rcaMetadata && (
+          <div class="space-y-6">
+            <div>
+              <div class="metadata-label">Product</div>
+              <div class="text-[0.75rem] font-medium">{frontmatter.rcaMetadata.product}</div>
+            </div>
+            <div>
+              <div class="metadata-label">CVE ID</div>
+              <div class="text-[0.75rem] font-mono font-bold text-black">{frontmatter.rcaMetadata.cveId}</div>
+            </div>
+            <div>
+              <div class="metadata-label">Reported</div>
+              <div class="text-[0.75rem]">{frontmatter.rcaMetadata.reportDate}</div>
+            </div>
+            {frontmatter.rcaMetadata.patchDate && (
+              <div>
+                <div class="metadata-label">Patched</div>
+                <div class="text-[0.75rem]">{frontmatter.rcaMetadata.patchDate}</div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div class="toc-nav space-y-6">
+          <div class="metadata-label">Outline</div>
+          <nav>
+            {tocItems.map(item => (
+              <a
+                href={`#${item.slug}`}
+                style={`margin-left: ${(item.depth - 2) * 1}rem`}
+                data-toc-link={item.slug}
+              >
+                {item.text}
+              </a>
+            ))}
+            {(frontmatter.references?.length ?? 0) > 0 && (
+              <a href="#bibliography" data-toc-link="bibliography" style="margin-top: 1rem;">References</a>
+            )}
+          </nav>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Column -->
+    <div class="main-column">
+      <!-- Article header -->
+      <div class="flex flex-col gap-10 mb-20 text-center">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-black font-serif leading-tight">
+          {frontmatter.title}
+        </h1>
+        <div class="flex flex-wrap justify-center gap-x-12 gap-y-6">
+          {frontmatter.authors.map(author => (
+            <div class="flex flex-col items-center">
+              <span class="font-serif text-lg font-medium text-black">{author.name}</span>
+              {author.affiliation && (
+                <span class="text-[0.65rem] font-mono text-gray-400 uppercase tracking-widest mt-1">{author.affiliation}</span>
+              )}
+            </div>
+          ))}
+        </div>
+        <div class="flex items-center justify-center gap-6 font-mono text-[0.65rem] uppercase tracking-[0.3em] text-gray-400">
+          <time datetime={dateStr}>{dateStr}</time>
+          <span class="opacity-30">·</span>
+          <span class="text-black font-bold">{frontmatter.type}</span>
+        </div>
+      </div>
+
+      <!-- Article body -->
+      <article id="main-content" class="prose-article">
+        <slot />
+      </article>
+
+      <!-- Bibliography -->
+      {(frontmatter.references?.length ?? 0) > 0 && (
+        <section class="mt-24 pt-12 border-t border-gray-100" id="bibliography">
+          <h2 class="font-mono text-[10px] uppercase tracking-[0.4em] mb-10 text-gray-400">References</h2>
+          <div class="space-y-8">
+            {frontmatter.references!.map((ref, idx) => (
+              <div id={ref.id} class="bib-item font-serif text-[14px] text-gray-600 flex gap-6">
+                <span class="font-mono text-[10px] text-gray-300 w-6 flex-shrink-0 pt-1">[{idx + 1}]</span>
+                <div class="leading-relaxed">
+                  <span class="font-medium text-black">{ref.authors}</span>.{' '}
+                  <span class="italic">"{ref.title}"</span>. {ref.year}.{' '}
+                  {ref.url && (
+                    <a href={ref.url} target="_blank" rel="noopener noreferrer" class="ml-2 text-[10px] font-mono uppercase text-gray-300 hover:text-black no-underline">
+                      [PDF]
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- Citation box -->
+      <section class="mt-24 pt-12 border-t border-gray-100" id="citation">
+        <h3 class="font-mono text-[10px] uppercase tracking-[0.4em] mb-6 text-gray-400">How to Cite</h3>
+        <div class="bibtex-box relative group">
+          <button
+            id="copy-bib"
+            class="absolute right-4 top-4 font-mono text-[9px] uppercase tracking-widest text-gray-300 hover:text-black cursor-pointer"
+          >
+            Copy
+          </button>
+          <code class="block select-all whitespace-pre-wrap">{bibtex}</code>
+        </div>
+      </section>
+    </div>
+
+    <!-- Sidenotes Sidebar (Right) -->
+    <aside class="margin-column hidden lg:block" aria-label="Annotations">
+      <div class="sticky-column" id="sidenotes-container">
+        <!-- Sidenotes are positioned here by client script -->
+      </div>
+    </aside>
+  </div>
+
+  <Footer />
+
+  <script>
+    // Copy BibTeX
+    document.getElementById('copy-bib')?.addEventListener('click', () => {
+      const code = document.querySelector('#citation code');
+      if (code) {
+        navigator.clipboard.writeText(code.textContent || '').then(() => {
+          const btn = document.getElementById('copy-bib');
+          if (btn) {
+            btn.textContent = 'Copied';
+            setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+          }
+        });
+      }
+    });
+
+    // TOC active section tracking
+    const tocLinks = document.querySelectorAll('[data-toc-link]');
+    const headings = document.querySelectorAll('#main-content h2, #main-content h3, #bibliography');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(link => link.classList.remove('active'));
+          const activeLink = document.querySelector(`[data-toc-link="${entry.target.id}"]`);
+          activeLink?.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
+
+    headings.forEach(h => observer.observe(h));
+
+    // Position sidenotes next to their anchors
+    function positionSidenotes() {
+      const container = document.getElementById('sidenotes-container');
+      const notes = document.querySelectorAll('.sidenote-data');
+      if (!container || notes.length === 0) return;
+
+      // Clear existing positioned notes
+      container.innerHTML = '';
+
+      let lastBottom = 0;
+      notes.forEach(note => {
+        const anchorId = note.getAttribute('data-anchor');
+        const anchor = anchorId ? document.getElementById(anchorId) : null;
+        if (!anchor) return;
+
+        const noteEl = document.createElement('div');
+        noteEl.className = 'marginalia-item';
+        noteEl.innerHTML = note.innerHTML;
+
+        let top = anchor.offsetTop;
+        if (top < lastBottom) top = lastBottom + 24;
+
+        noteEl.style.top = top + 'px';
+        container.appendChild(noteEl);
+        lastBottom = top + noteEl.offsetHeight;
+      });
+    }
+
+    // Run on load and resize
+    if (window.innerWidth >= 1000) {
+      window.addEventListener('load', positionSidenotes);
+      window.addEventListener('resize', positionSidenotes);
+    }
+  </script>
+
+</BaseLayout>

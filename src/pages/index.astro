@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const posts = (await getCollection('posts'))
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Group by year
+const grouped = posts.reduce((acc, post) => {
+  const year = post.data.date.getFullYear().toString();
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(post);
+  return acc;
+}, {} as Record<string, typeof posts>);
+
+const years = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+
+const typeColors: Record<string, string> = {
+  RCA: 'text-red-600',
+  ESSAY: 'text-blue-600',
+  NOTE: 'text-emerald-600',
+};
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase();
+};
+---
+
+<BaseLayout title="sidechannels.pub">
+  <Header />
+
+  <main class="max-w-[680px] mx-auto px-6 pt-24 pb-48">
+    <!-- Site header -->
+    <header class="mb-24 text-center">
+      <div class="flex items-center justify-center gap-6 font-mono text-[9px] uppercase tracking-[0.6em] text-gray-500 mb-10" aria-hidden="true">
+        <span class="w-16 h-px bg-gray-200"></span>
+        <span>Technical Research</span>
+        <span class="w-16 h-px bg-gray-200"></span>
+      </div>
+
+      <h1 class="text-5xl md:text-7xl font-medium mb-8 tracking-tighter text-black font-serif leading-[1.05]">
+        sidechannels
+      </h1>
+
+      <p class="text-xl md:text-2xl text-gray-500 leading-relaxed font-serif italic max-w-[45ch] mx-auto">
+        Experimental writing at the edge of security research. Tracing assumptions, questioning what isn't mainstream.
+      </p>
+    </header>
+
+    <!-- Research pillars -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 pt-16 border-t border-gray-100 mb-24 text-left">
+      <div>
+        <h4 class="font-mono text-[11px] uppercase tracking-[0.3em] font-bold text-black border-b border-gray-100 pb-2 mb-3">Security</h4>
+        <p class="text-[14px] text-gray-600 font-serif leading-relaxed">Exploit primitives, memory corruption, and kernel internals.</p>
+      </div>
+      <div>
+        <h4 class="font-mono text-[11px] uppercase tracking-[0.3em] font-bold text-black border-b border-gray-100 pb-2 mb-3">Interpretability</h4>
+        <p class="text-[14px] text-gray-600 font-serif leading-relaxed">Mechanistic theory and circuit analysis of LLMs.</p>
+      </div>
+      <div>
+        <h4 class="font-mono text-[11px] uppercase tracking-[0.3em] font-bold text-black border-b border-gray-100 pb-2 mb-3">Verification</h4>
+        <p class="text-[14px] text-gray-600 font-serif leading-relaxed">Formal methods and safety invariants in distributed systems.</p>
+      </div>
+    </div>
+
+    <!-- Posts by year -->
+    <section class="space-y-20">
+      {years.map(year => (
+        <div>
+          <div class="font-mono text-[11px] text-gray-400 uppercase tracking-[0.5em] mb-8 border-b border-gray-100 pb-3">
+            {year}
+          </div>
+          <div class="space-y-12">
+            {grouped[year].map(post => (
+              <article class="group">
+                <div class="flex items-baseline gap-4 mb-2 font-mono text-[11px] uppercase tracking-[0.2em]">
+                  <time datetime={post.data.date.toISOString()} class="text-gray-400 w-16 flex-shrink-0">
+                    {formatDate(post.data.date)}
+                  </time>
+                  <span class={`font-bold ${typeColors[post.data.type] || 'text-gray-500'}`}>
+                    {post.data.type}
+                  </span>
+                </div>
+                <a href={`/posts/${post.id}/`} class="block no-underline">
+                  <h2 class="text-2xl md:text-3xl font-medium text-black group-hover:text-gray-600 transition-colors leading-tight font-serif tracking-tight mb-3">
+                    {post.data.title}
+                  </h2>
+                </a>
+                <p class="text-[15px] text-gray-500 font-serif leading-relaxed mb-3 max-w-[60ch]">
+                  {post.data.summary}
+                </p>
+                <div class="flex flex-wrap gap-4 font-mono text-[10px] uppercase tracking-[0.15em] text-gray-400">
+                  {post.data.tags.map(tag => (
+                    <span class="hover:text-black transition-colors">#{tag}</span>
+                  ))}
+                  {post.data.rcaMetadata?.cveId && (
+                    <span class="font-bold text-gray-500">{post.data.rcaMetadata.cveId}</span>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      ))}
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

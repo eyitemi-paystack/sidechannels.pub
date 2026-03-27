@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="About — sidechannels.pub" description="About sidechannels.pub and its author.">
+  <Header />
+
+  <main class="max-w-[680px] mx-auto px-6 pt-24 pb-32">
+    <h1 class="text-4xl md:text-5xl font-medium tracking-tight text-black font-serif leading-tight mb-12">
+      About
+    </h1>
+
+    <div class="prose-article">
+      <p>
+        <strong>sidechannels.pub</strong> is a space for experimental, epistemological technical writing — the kind that traces assumptions and questions what isn't mainstream.
+      </p>
+
+      <p>
+        The name is a double entendre: in security, a <em>side channel</em> is an attack vector that extracts information through unintended pathways. Outside security, it means an unofficial channel of communication. This blog is both.
+      </p>
+
+      <h2 id="what">What you'll find here</h2>
+
+      <ul>
+        <li><strong>Root Cause Analyses (RCA)</strong> — Deep technical dissections of CVEs, tracing vulnerabilities from trigger to patch.</li>
+        <li><strong>Essays</strong> — Experimental writing on interpretability, formal methods, and the edges of what we understand.</li>
+        <li><strong>Notes</strong> — Informal observations, verification sketches, and research fragments.</li>
+      </ul>
+
+      <p>
+        The polished, "thought leader" writing lives on <a href="https://substack.com/@eeyitemi" target="_blank" rel="noopener noreferrer">Substack</a>. This is the workshop — where ideas are tested before they're refined.
+      </p>
+
+      <h2 id="elsewhere">Elsewhere</h2>
+
+      <ul>
+        <li><a href="https://substack.com/@eeyitemi" target="_blank" rel="noopener noreferrer">Substack</a> — Polished essays and analysis</li>
+        <li><a href="https://github.com/insaida" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="https://insaida.github.io" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
+      </ul>
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

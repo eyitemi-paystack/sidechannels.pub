@@ -1,0 +1,19 @@
+---
+interface Props {
+  showBack?: boolean;
+}
+const { showBack = false } = Astro.props;
+---
+
+<header class="w-full border-b border-gray-100">
+  <div class="max-w-[1200px] mx-auto px-6 py-5 flex items-center justify-between">
+    <a href="/" class="font-mono text-[11px] uppercase tracking-[0.3em] text-black hover:text-gray-600 transition-colors no-underline font-bold">
+      {showBack ? '← sidechannels' : 'sidechannels.pub'}
+    </a>
+    <nav class="flex items-center gap-8 font-mono text-[10px] uppercase tracking-[0.2em] text-gray-400">
+      <a href="/" class="hover:text-black transition-colors no-underline">Archive</a>
+      <a href="/about" class="hover:text-black transition-colors no-underline">About</a>
+      <a href="/rss.xml" class="hover:text-black transition-colors no-underline">RSS</a>
+    </nav>
+  </div>
+</header>

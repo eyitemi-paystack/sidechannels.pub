@@ -1,0 +1,47 @@
+---
+type: ESSAY
+title: "Attention Mechanisms as Computational Circuits"
+date: 2024-11-20
+authors:
+  - name: Alice V. Researcher
+    affiliation: Interpretability Unit
+summary: "A mechanistic theory of multi-head attention in transformer architectures, proposing that individual heads act as discrete gates in a larger computational circuit."
+tags: [machine-learning, interpretability, theory]
+references:
+  - id: elhage2021
+    title: "A Mathematical Framework for Transformer Circuits"
+    authors: "N. Elhage, N. Nanda, C. Olsson, et al."
+    year: "2021"
+    url: "https://transformer-circuits.pub/2021/framework/index.html"
+  - id: nanda2022
+    title: "Progress measures for grokking via mechanistic interpretability"
+    authors: "Neel Nanda, et al."
+    year: "2022"
+    url: "https://arxiv.org/abs/2301.05039"
+---
+
+import Sidenote from '../../components/Sidenote.astro';
+
+<div class="abstract">
+How do transformers perform computation? While the architecture is known, the mechanistic internal logic remains opaque. This essay explores the hypothesis that individual attention heads act as discrete gates in a larger computational circuit.
+</div>
+
+## The Circuit Hypothesis
+
+<p id="p-circuit-1">We treat the transformer's residual stream as a communication bus. Each attention head reads from this bus, performs a transformation, and writes the result back.<Sidenote id="m4" anchor="p-circuit-1" num="1">Residual stream as a "vector space bus" is a key insight from the Anthropic team.</Sidenote></p>
+
+> "Individual attention heads are not monolithic feature detectors, but rather modular gates that selectively route information across the residual stream."
+
+<p id="p-circuit-2">An induction head is a specific pattern where a head attends to a previous token that was followed by the current token.<Sidenote id="m5" anchor="p-circuit-2" num="2">These heads are responsible for the "grokking" phenomenon.</Sidenote></p>
+
+## Mathematical Formalism
+
+The attention operation can be written as a bilinear form over the embedding space:
+
+$$A = \text{softmax}\left(\frac{Q K^T}{\sqrt{d_k}}\right) V$$
+
+By decomposing the $W_Q W_K^T$ matrix into its singular value decomposition (SVD), we can identify "feature directions" that the model is specifically looking for.
+
+## The Emergence of Logic
+
+By analyzing the eigenvalues of these products across different layers, we can observe the "emergence" of specific grammatical logic during the training process. Induction heads typically emerge suddenly around 50% through training.

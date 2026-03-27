@@ -1,0 +1,21 @@
+---
+interface Props {
+  id: string;
+  anchor?: string;
+  num?: number | string;
+}
+const { id, anchor, num } = Astro.props;
+---
+
+<!-- Inline reference marker -->
+<span class="sidenote-ref" data-note={id} role="doc-noteref" tabindex="0">{num}</span>
+
+<!-- Mobile inline footnote -->
+<aside class="sidenote-inline" role="note">
+  <slot />
+</aside>
+
+<!-- Data element for desktop positioning script -->
+<template class="sidenote-data" data-anchor={anchor || ''} data-id={id}>
+  <slot />
+</template>

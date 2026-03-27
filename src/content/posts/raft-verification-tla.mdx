@@ -1,0 +1,48 @@
+---
+type: NOTE
+title: "Verification Notes: Raft Consensus Safety in TLA+"
+date: 2024-10-12
+authors:
+  - name: Marcus Chen
+    affiliation: Distributed Systems Lab
+summary: "Observations on using formal specifications to verify leader election safety and log matching properties in Raft clusters."
+tags: [distributed-systems, formal-methods, tla-plus]
+references:
+  - id: raft-paper
+    title: "In Search of an Understandable Consensus Algorithm"
+    authors: "Diego Ongaro and John Ousterhout"
+    year: "2014"
+    url: "https://raft.github.io/raft.pdf"
+  - id: tla-book
+    title: "Specifying Systems: The TLA+ Language and Tools"
+    authors: "Leslie Lamport"
+    year: "2002"
+    url: "https://lamport.azurewebsites.net/tla/book.html"
+---
+
+import Sidenote from '../../components/Sidenote.astro';
+
+<div class="abstract">
+The Raft consensus algorithm is designed for understandability, but its formal verification reveals subtle edge cases in leader transition.
+</div>
+
+## Election Safety Invariant
+
+<p id="p-safety-1">The core safety property of Raft is that at most one leader can be elected in a given term.<Sidenote id="n1" anchor="p-safety-1" num="1">Safety invariants are checked for every reachable state in the model.</Sidenote></p>
+
+```tla
+// TLA+ Specification Snippet: Election Safety Invariant
+ElectionSafety ==
+    \A t \in Terms :
+        Cardinality({i \in Servers : state[i] = Leader /\ currentTerm[i] = t}) <= 1
+```
+
+Using the TLC model checker, we can verify this invariant for small cluster sizes (N=3, N=5).
+
+## Log Matching and Persistence
+
+A more complex property is Log Matching: if two logs contain an entry with the same index and term, then the logs are identical.
+
+## Liveness and Temporal Logic
+
+<p id="p-live">While safety is straightforward to prove, liveness requires assumptions about temporal properties.<Sidenote id="n2" anchor="p-live" num="2">TLA+ uses temporal logic to express "eventually" properties.</Sidenote></p>
