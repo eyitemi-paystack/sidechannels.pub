@@ -15,11 +15,29 @@ interface Props {
     tags?: string[];
     references?: { id: string; title: string; authors: string; year: string; url?: string }[];
     rcaMetadata?: { vendor: string; product: string; cveId: string; reportDate: string; patchDate?: string };
+    vulnResearchMetadata?: { target: string; component?: string; severity?: string; status?: string; cveId?: string; bountyPlatform?: string };
   };
   headings: { depth: number; slug: string; text: string }[];
+  prevPost?: { slug: string; title: string } | null;
+  nextPost?: { slug: string; title: string } | null;
 }
 
-const { frontmatter, headings } = Astro.props;
+const { frontmatter, headings, prevPost, nextPost } = Astro.props;
+
+const typeLabels: Record<string, string> = {
+  'RCA': 'RCA',
+  'ESSAY': 'ESSAY',
+  'NOTE': 'NOTE',
+  'VULNERABILITY-RESEARCH': 'VULN RESEARCH',
+};
+
+const severityColors: Record<string, string> = {
+  'CRITICAL': 'text-red-700 font-bold',
+  'HIGH': 'text-orange-600 font-bold',
+  'MEDIUM': 'text-yellow-600',
+  'LOW': 'text-blue-600',
+  'INFORMATIONAL': 'text-gray-500',
+};
 const dateStr = frontmatter.date instanceof Date
   ? frontmatter.date.toISOString().split('T')[0]
   : String(frontmatter.date);
@@ -76,6 +94,45 @@ const tocItems = headings.filter(h => h.depth <= 3);
           </div>
         )}
 
+        {frontmatter.vulnResearchMetadata && (
+          <div class="space-y-6">
+            <div>
+              <div class="metadata-label">Target</div>
+              <div class="text-[0.75rem] font-medium">{frontmatter.vulnResearchMetadata.target}</div>
+            </div>
+            {frontmatter.vulnResearchMetadata.component && (
+              <div>
+                <div class="metadata-label">Component</div>
+                <div class="text-[0.75rem]">{frontmatter.vulnResearchMetadata.component}</div>
+              </div>
+            )}
+            {frontmatter.vulnResearchMetadata.severity && (
+              <div>
+                <div class="metadata-label">Severity</div>
+                <div class={`text-[0.75rem] font-mono ${severityColors[frontmatter.vulnResearchMetadata.severity] || ''}`}>
+                  {frontmatter.vulnResearchMetadata.severity}
+                </div>
+              </div>
+            )}
+            <div>
+              <div class="metadata-label">Status</div>
+              <div class="text-[0.75rem] font-mono">{frontmatter.vulnResearchMetadata.status || 'INVESTIGATING'}</div>
+            </div>
+            {frontmatter.vulnResearchMetadata.cveId && (
+              <div>
+                <div class="metadata-label">CVE ID</div>
+                <div class="text-[0.75rem] font-mono font-bold text-black">{frontmatter.vulnResearchMetadata.cveId}</div>
+              </div>
+            )}
+            {frontmatter.vulnResearchMetadata.bountyPlatform && (
+              <div>
+                <div class="metadata-label">Platform</div>
+                <div class="text-[0.75rem]">{frontmatter.vulnResearchMetadata.bountyPlatform}</div>
+              </div>
+            )}
+          </div>
+        )}
+
         <div class="toc-nav space-y-6">
           <div class="metadata-label">Outline</div>
           <nav>
@@ -99,7 +156,7 @@ const tocItems = headings.filter(h => h.depth <= 3);
     <!-- Main Column -->
     <div class="main-column">
       <!-- Article header -->
-      <div class="flex flex-col gap-10 mb-20 text-center">
+      <div class="flex flex-col gap-6 sm:gap-10 mb-12 sm:mb-20 text-center">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-black font-serif leading-tight">
           {frontmatter.title}
         </h1>
@@ -116,7 +173,7 @@ const tocItems = headings.filter(h => h.depth <= 3);
         <div class="flex items-center justify-center gap-6 font-mono text-[0.65rem] uppercase tracking-[0.3em] text-gray-400">
           <time datetime={dateStr}>{dateStr}</time>
           <span class="opacity-30">·</span>
-          <span class="text-black font-bold">{frontmatter.type}</span>
+          <span class="text-black font-bold">{typeLabels[frontmatter.type] || frontmatter.type}</span>
         </div>
         {frontmatter.lastUpdated && (
           <div class="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-gray-400">
@@ -199,6 +256,26 @@ const tocItems = headings.filter(h => h.depth <= 3);
     </aside>
   </div>
 
+  <!-- Prev / Next navigation -->
+  {(prevPost || nextPost) && (
+    <nav class="max-w-[680px] mx-auto px-4 sm:px-6 mt-16 sm:mt-24 pt-12 border-t border-gray-100" aria-label="Post navigation">
+      <div class="flex justify-between items-start gap-8">
+        {prevPost ? (
+          <a href={`/posts/${prevPost.slug}/`} class="group flex flex-col gap-1 no-underline max-w-[45%]">
+            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400 group-hover:text-black transition-colors">← Previous</span>
+            <span class="font-serif text-sm sm:text-base text-gray-600 group-hover:text-black transition-colors leading-snug">{prevPost.title}</span>
+          </a>
+        ) : <div />}
+        {nextPost ? (
+          <a href={`/posts/${nextPost.slug}/`} class="group flex flex-col gap-1 no-underline text-right max-w-[45%] ml-auto">
+            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gray-400 group-hover:text-black transition-colors">Next →</span>
+            <span class="font-serif text-sm sm:text-base text-gray-600 group-hover:text-black transition-colors leading-snug">{nextPost.title}</span>
+          </a>
+        ) : <div />}
+      </div>
+    </nav>
+  )}
+
   <Footer />
 
   <script>
@@ -260,10 +337,14 @@ const tocItems = headings.filter(h => h.depth <= 3);
       });
     }
 
-    // Run on load and resize
+    // Run on load and debounced resize
     if (window.innerWidth >= 1000) {
       window.addEventListener('load', positionSidenotes);
-      window.addEventListener('resize', positionSidenotes);
+      let resizeTimer: number;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(positionSidenotes, 250);
+      });
     }
   </script>
 
