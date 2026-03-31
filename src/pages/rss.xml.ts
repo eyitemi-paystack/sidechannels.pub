@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
-  const posts = await getCollection('posts');
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
   return rss({
     title: 'sidechannels.pub',
     description: 'Experimental technical writing at the edge of security research.',
@@ -15,6 +15,9 @@ export async function GET(context: APIContext) {
         pubDate: post.data.date,
         description: post.data.summary,
         link: `/posts/${post.id}/`,
+        categories: post.data.tags,
+        customData: `<type>${post.data.type.replace(/[<>&'"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' })[c] ?? c)}</type>`,
       })),
+    customData: '<language>en-us</language>',
   });
 }

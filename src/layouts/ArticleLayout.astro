@@ -316,7 +316,7 @@ const tocItems = headings.filter(h => h.depth <= 3);
       if (!container || notes.length === 0) return;
 
       // Clear existing positioned notes
-      container.innerHTML = '';
+      while (container.firstChild) container.firstChild.remove();
 
       let lastBottom = 0;
       notes.forEach(note => {
@@ -326,7 +326,7 @@ const tocItems = headings.filter(h => h.depth <= 3);
 
         const noteEl = document.createElement('div');
         noteEl.className = 'marginalia-item';
-        noteEl.innerHTML = note.innerHTML;
+        Array.from(note.childNodes).forEach(child => noteEl.appendChild(child.cloneNode(true)));
 
         let top = anchor.offsetTop;
         if (top < lastBottom) top = lastBottom + 24;
