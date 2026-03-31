@@ -8,6 +8,7 @@ import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
   site: 'https://sidechannels.pub',
+  compressHTML: true,
   integrations: [
     mdx(),
     sitemap(),
