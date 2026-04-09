@@ -4,6 +4,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import remarkMath from 'remark-math';
+import remarkSmartypants from 'remark-smartypants';
 import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
@@ -14,7 +15,7 @@ export default defineConfig({
     sitemap(),
   ],
   markdown: {
-    remarkPlugins: [remarkMath],
+    remarkPlugins: [remarkMath, remarkSmartypants],
     rehypePlugins: [rehypeKatex],
     shikiConfig: {
       theme: 'github-light',
