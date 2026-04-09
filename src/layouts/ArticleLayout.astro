@@ -53,7 +53,7 @@ const bibtex = `@article{${firstAuthor.toLowerCase()}${year}${slug.split('-')[0]
   url = {https://sidechannels.pub${Astro.url.pathname}}
 }`;
 
-const tocItems = headings.filter(h => h.depth <= 3);
+const tocItems = headings.filter(h => h.depth <= 2);
 ---
 
 <BaseLayout
@@ -223,7 +223,7 @@ const tocItems = headings.filter(h => h.depth <= 3);
                   <span class="italic">"{ref.title}"</span>. {ref.year}.{' '}
                   {ref.url && (
                     <a href={ref.url} target="_blank" rel="noopener noreferrer" class="ml-2 text-[10px] font-mono uppercase text-gray-300 hover:text-black no-underline">
-                      [PDF]
+                      {ref.url.endsWith('.pdf') ? '[PDF]' : '[↗]'}
                     </a>
                   )}
                 </div>
@@ -249,10 +249,8 @@ const tocItems = headings.filter(h => h.depth <= 3);
     </div>
 
     <!-- Sidenotes Sidebar (Right) -->
-    <aside class="margin-column hidden lg:block" aria-label="Annotations">
-      <div class="sticky-column" id="sidenotes-container">
-        <!-- Sidenotes are positioned here by client script -->
-      </div>
+    <aside class="margin-column hidden lg:block" aria-label="Annotations" id="sidenotes-container">
+      <!-- Sidenotes are positioned here by client script -->
     </aside>
   </div>
 
@@ -315,8 +313,11 @@ const tocItems = headings.filter(h => h.depth <= 3);
       const notes = document.querySelectorAll('.sidenote-data');
       if (!container || notes.length === 0) return;
 
-      // Clear existing positioned notes
-      while (container.firstChild) container.firstChild.remove();
+      // Clear any previously positioned notes (keep non-positioned children)
+      container.querySelectorAll('.marginalia-item').forEach(el => el.remove());
+
+      // Get container's offset to convert body-relative tops to container-relative
+      const containerTop = container.getBoundingClientRect().top + window.scrollY;
 
       let lastBottom = 0;
       notes.forEach(note => {
@@ -326,9 +327,11 @@ const tocItems = headings.filter(h => h.depth <= 3);
 
         const noteEl = document.createElement('div');
         noteEl.className = 'marginalia-item';
-        Array.from(note.childNodes).forEach(child => noteEl.appendChild(child.cloneNode(true)));
+        const source = note.content || note;
+        Array.from(source.childNodes).forEach(child => noteEl.appendChild(child.cloneNode(true)));
 
-        let top = anchor.offsetTop;
+        const anchorTop = anchor.getBoundingClientRect().top + window.scrollY;
+        let top = anchorTop - containerTop;
         if (top < lastBottom) top = lastBottom + 24;
 
         noteEl.style.top = top + 'px';

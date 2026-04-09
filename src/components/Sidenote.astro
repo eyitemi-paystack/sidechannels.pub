@@ -10,10 +10,10 @@ const { id, anchor, num } = Astro.props;
 <!-- Inline reference marker -->
 <span class="sidenote-ref" data-note={id} role="doc-noteref" tabindex="0">{num}</span>
 
-<!-- Mobile inline footnote -->
-<aside class="sidenote-inline" role="note">
+<!-- Mobile inline footnote (span instead of aside to stay valid inside <p>) -->
+<span class="sidenote-inline" role="note">
   <slot />
-</aside>
+</span>
 
 <!-- Data element for desktop positioning script -->
 <template class="sidenote-data" data-anchor={anchor || ''} data-id={id}>

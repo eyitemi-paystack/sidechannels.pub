@@ -4,7 +4,7 @@ import { glob } from 'astro/loaders';
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/posts' }),
   schema: z.object({
-    type: z.enum(['RCA', 'ESSAY', 'NOTE', 'VULNRESEARCH']),
+    type: z.enum(['RCA', 'ESSAY', 'NOTE', 'VULNERABILITY-RESEARCH']),
     title: z.string(),
     date: z.coerce.date(),
     lastUpdated: z.coerce.date().optional(),
@@ -34,6 +34,14 @@ const posts = defineCollection({
       cveId: z.string(),
       reportDate: z.string(),
       patchDate: z.string().optional(),
+    }).optional(),
+    vulnResearchMetadata: z.object({
+      target: z.string(),
+      component: z.string().optional(),
+      severity: z.enum(['INFORMATIONAL', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).optional(),
+      status: z.enum(['INVESTIGATING', 'REPORTED', 'PATCHED', 'WONT-FIX', 'DUPLICATE', 'N/A']).default('INVESTIGATING'),
+      cveId: z.string().optional(),
+      bountyPlatform: z.string().optional(),
     }).optional(),
   }),
 });

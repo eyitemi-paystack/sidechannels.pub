@@ -22,7 +22,7 @@ const typeColors: Record<string, string> = {
   RCA: 'text-red-600',
   ESSAY: 'text-blue-600',
   NOTE: 'text-emerald-600',
-  VULNRESEARCH: 'text-orange-600',
+  'VULNERABILITY-RESEARCH': 'text-orange-600',
 };
 
 const formatDate = (date: Date) => {
@@ -33,26 +33,26 @@ const formatDate = (date: Date) => {
 <BaseLayout title="sidechannels.pub">
   <Header />
 
-  <main class="max-w-[680px] mx-auto px-6 pt-24 pb-48">
+  <main id="main-content" class="max-w-[680px] mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-32 sm:pb-48">
     <!-- Site header -->
-    <header class="mb-24 text-center">
+    <header class="mb-16 sm:mb-24 text-center">
       <div class="flex items-center justify-center gap-6 font-mono text-[9px] uppercase tracking-[0.6em] text-gray-500 mb-10" aria-hidden="true">
         <span class="w-16 h-px bg-gray-200"></span>
         <span>Technical Research</span>
         <span class="w-16 h-px bg-gray-200"></span>
       </div>
 
-      <h1 class="text-5xl md:text-7xl font-medium mb-8 tracking-tighter text-black font-serif leading-[1.05]">
+      <h1 class="text-4xl sm:text-5xl md:text-7xl font-medium mb-6 sm:mb-8 tracking-tighter text-black font-serif leading-[1.05]">
         sidechannels
       </h1>
 
-      <p class="text-xl md:text-2xl text-gray-500 leading-relaxed font-serif italic max-w-[45ch] mx-auto">
+      <p class="text-lg sm:text-xl md:text-2xl text-gray-500 leading-relaxed font-serif italic max-w-[45ch] mx-auto">
         Experimental writing at the edge of security research. Tracing assumptions, questioning what isn't mainstream.
       </p>
     </header>
 
     <!-- Research pillars -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 pt-16 border-t border-gray-100 mb-24 text-left">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10 pt-12 sm:pt-16 border-t border-gray-100 mb-16 sm:mb-24 text-left">
       <div>
         <h4 class="font-mono text-[11px] uppercase tracking-[0.3em] font-bold text-black border-b border-gray-100 pb-2 mb-3">Security</h4>
         <p class="text-[14px] text-gray-600 font-serif leading-relaxed">Exploit primitives, memory corruption, and kernel internals.</p>
@@ -99,6 +99,12 @@ const formatDate = (date: Date) => {
                   ))}
                   {post.data.rcaMetadata?.cveId && (
                     <span class="font-bold text-gray-500">{post.data.rcaMetadata.cveId}</span>
+                  )}
+                  {post.data.vulnResearchMetadata?.cveId && (
+                    <span class="font-bold text-gray-500">{post.data.vulnResearchMetadata.cveId}</span>
+                  )}
+                  {post.data.vulnResearchMetadata?.severity && (
+                    <span class="font-bold text-gray-500">{post.data.vulnResearchMetadata.severity}</span>
                   )}
                 </div>
               </article>
