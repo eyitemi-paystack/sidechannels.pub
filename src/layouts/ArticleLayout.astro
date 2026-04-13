@@ -31,6 +31,13 @@ const typeLabels: Record<string, string> = {
   'VULNERABILITY-RESEARCH': 'VULN RESEARCH',
 };
 
+const typeColors: Record<string, string> = {
+  'RCA': 'text-red-600',
+  'ESSAY': 'text-blue-600',
+  'NOTE': 'text-emerald-600',
+  'VULNERABILITY-RESEARCH': 'text-orange-600',
+};
+
 const severityColors: Record<string, string> = {
   'CRITICAL': 'text-red-700 font-bold',
   'HIGH': 'text-orange-600 font-bold',
@@ -173,7 +180,7 @@ const tocItems = headings.filter(h => h.depth <= 2);
         <div class="flex items-center justify-center gap-6 font-mono text-[0.65rem] uppercase tracking-[0.3em] text-gray-400">
           <time datetime={dateStr}>{dateStr}</time>
           <span class="opacity-30">·</span>
-          <span class="text-black font-bold">{typeLabels[frontmatter.type] || frontmatter.type}</span>
+          <span class={`font-bold ${typeColors[frontmatter.type] || 'text-black'}`}>{typeLabels[frontmatter.type] || frontmatter.type}</span>
         </div>
         {frontmatter.lastUpdated && (
           <div class="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-gray-400">

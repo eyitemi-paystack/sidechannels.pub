@@ -1,7 +1,7 @@
 ---
 type: ESSAY
 title: "Severity Inflation as a Signaling Failure: A Researcher's Quality Gate"
-date: 2026-04-08
+date: 2026-04-13
 draft: false
 authors:
   - name: Eyitemi Egbejule
@@ -88,49 +88,49 @@ import Sidenote from '../../components/Sidenote.astro';
 
 ## 1. The slop crisis didn't end. It bifurcated.
 
-In late March and the first week of April 2026, three of the most prominent maintainers in open-source software—on three different platforms, within a span of ten days—described a single shift in the discourse. The bug-bounty signal-failure crisis that had buried curl, the Linux kernel, Node.js, Django, and the Internet Bug Bounty platform throughout 2024 and 2025 was no longer the crisis it had been. It was now two crises, running in parallel, with one underlying cause.
+In late March and the first week of April 2026, three of the most prominent maintainers in open-source software—across multiple platforms, within a span of ten days—described a single shift in the discourse. The bug-bounty signal-failure crisis that had buried curl, the Linux kernel, Node.js, Django, and the Internet Bug Bounty platform throughout 2024 and 2025 was no longer the crisis it had been. It was now two crises, running in parallel, with one underlying cause.
 
 On April 2, [Daniel Stenberg posted on Mastodon](https://mastodon.social/@bagder/116336957584445742): *"The challenge with AI in open source security has transitioned from an AI slop tsunami into more of a … plain security report tsunami. Less slop but lots of reports. Many of them really good. I'm spending hours per day on this now. It's intense."* 
 
-Three days later [on LinkedIn](https://www.linkedin.com/posts/danielstenberg_hackerone-activity-7446667043996725249-ZhEU/): *"Over the last few months, we have stopped getting AI slop security reports in the #curl project. They're gone. Instead we get an ever-increasing amount of really good security reports, almost all done with the help of AI. … Lots of these good reports are deemed 'just bugs' and things we deem not having security properties."*
+And then, three days later [on LinkedIn](https://www.linkedin.com/posts/danielstenberg_hackerone-activity-7446667043996725249-ZhEU/): *"Over the last few months, we have stopped getting AI slop security reports in the #curl project. They're gone. Instead we get an ever-increasing amount of really good security reports, almost all done with the help of AI. … Lots of these good reports are deemed 'just bugs' and things we deem not having security properties."*
 
 Willy Tarreau, in [an LWN comment on March 31](https://lwn.net/Articles/1065620/), described the same phenomenon from the kernel side: the kernel security team had been receiving two or three reports a week two years prior, ten a week throughout the AI slop era, and was now processing five to ten per day. *"Now most of these reports are correct,"* he wrote, *"to the point that we had to bring in more maintainers to help us."* Then a sentence with no precedent: *"we're now seeing on a daily basis something that never happened before: duplicate reports, or the same bug found by two different people using (possibly slightly) different tools."*
 
 And at KubeCon Europe in late March, Greg Kroah-Hartman—quoted in the epigraph—gave the inflection point its name. He went on: *"All open source projects have real reports that are made with AI, but they're good, and they're real."* On capacity: *"For the kernel, we can handle it. We're a much larger team, very distributed, and our increase is real—and it's not slowing down."*
 
-I should be explicit about something here. Kroah-Hartman's framing is unambiguously positive. He is describing a *quality improvement*, not a quality crisis. The bifurcation argument the rest of this post is built on is not his—it is mine. He gestured at it when he said *"all open source projects have real reports,"* and the post extends that gesture into a structural claim about the under-resourced long tail. If Kroah-Hartman objects to the extension, the objection is fair, and the structural claim belongs to me, not him. What I am arguing is that his positivity at the well-defended frontier and the crisis at the smaller programs are two readings of the same shift, and that both readings are true at the same time.
+Something I should be explicit about here is that Kroah-Hartman's framing is unambiguously positive. He is describing a *quality improvement*, not a quality crisis. The bifurcation argument the rest of this post is built on is not his, but mine. He gestured at it when he said *"all open source projects have real reports,"* and the post extends that gesture into a structural claim about the under-resourced long tail. If Kroah-Hartman objects to the extension, the objection is fair, and the structural claim belongs to me, not him. What I am arguing is that his positivity at the well-defended frontier and the crisis at the smaller programs are two readings of the same shift, and that both readings are true at the same time.
 
 <p id="p-signal">These three voices document one event from three vantages. At the well-defended top of the open-source security ecosystem—projects with strong maintainer voices, organized engineering responses, signal-score gates, and the political capital to ban reporters publicly—the AI-generated slop wave has receded, replaced by something harder to fight: an ever-increasing volume of technically-correct, AI-assisted vulnerability reports, many of which the maintainers do not consider security at all. <em>Well-defended</em> covers a real spectrum here, from a small core team led by a widely-respected maintainer (curl) to a hundreds-engineer security organization (the Linux kernel); what unites them is the ability to absorb the new failure mode without going dark.<Sidenote id="s2" anchor="p-signal" num="2">HackerOne assigns a Signal score to researchers based on the ratio of valid to invalid submissions. Programs can set minimum thresholds to filter low-quality reporters before reports reach the triage queue.</Sidenote></p>
 
 The dominant failure mode at the well-defended top of the frontier is no longer primarily fabrication. It has shifted toward *severity-and-scope inflation in real reports*.
 
-This is not necessarily inflation in bad faith. Many of these reports are submitted by researchers operating in good faith with a different scope model than the maintainer's. The triage outcome is the same as for an inflated report; the equilibrium consequence is the same regardless of intent. [§4](#4-a-taxonomy-of-researcher-side-severity-inflation-antipatterns) returns to this distinction.
+This, I should point out, is not necessarily inflation in bad faith. Many of these reports are submitted by researchers operating in good faith with a different scope model than the maintainer's. The triage outcome is the same as for an inflated report; the equilibrium consequence is the same regardless of intent. [§4](#4-a-taxonomy-of-researcher-side-severity-inflation-antipatterns) returns to this distinction.
 
-Beyond the maintainer trenches, the policy critique has been equally direct. [Katie Moussouris](https://www.linkedin.com/posts/kmoussouris_bug-bountymd-we-stop-the-bug-bounty-end-activity-7419755161675440128-9RkH/)—long the most authoritative voice in the bug bounty world—wrote in January 2026 of the curl shutdown: *"AI was the accelerant on a perverse incentive fire sparked by bug bounty platforms that reward spray & pray. Both open source & orgs without dedicated vuln response teams get overloaded when they offer cash there. cURL is right to leave AI shark-infested waters to start fresh."* 
+Beyond the maintainer trenches, the policy critique has been equally direct. [Katie Moussouris](https://www.linkedin.com/posts/kmoussouris_bug-bountymd-we-stop-the-bug-bounty-end-activity-7419755161675440128-9RkH/)—long regarded as the most authoritative voice in the bug bounty world—wrote in January 2026 of the curl shutdown: *"AI was the accelerant on a perverse incentive fire sparked by bug bounty platforms that reward spray & pray. Both open source & orgs without dedicated vuln response teams get overloaded when they offer cash there. cURL is right to leave AI shark-infested waters to start fresh."* 
 
 She had named the underlying structural asymmetry months earlier, in [an interview with *The Register* published in August 2025](https://www.theregister.com/2025/08/24/bug_bounty_advice/): *"It creates a lot of noise for maintainers, especially in the open source world, who can't afford the triage services. That's going to hurt all of us in the ecosystem long term."* Moussouris's framing is the missing dimension in the maintainer chorus. The bifurcation is not only between programs that have maintainers and programs that don't. It is also between programs that can afford the triage capacity to absorb a high-volume signal-failure regime and programs that cannot.
 
-But this is only one half of the picture. <p id="p-ibb">The Internet Bug Bounty has paused payouts to upstream open-source projects, and <a href="https://nodejs.org/en/blog/announcements/discontinuing-security-bug-bounties">Node.js formally announced</a> it could no longer offer monetary rewards for vulnerability reports—while continuing to accept and triage security submissions through HackerOne. Node.js had relied on IBB funding for its bug bounty since 2016.<Sidenote id="s3" anchor="p-ibb" num="3">The IBB is a pooled-donation funding mechanism that paid bounty rewards on behalf of open-source projects. It is not a bug bounty platform; it is the funding source that made platforms like HackerOne viable for projects that could not self-fund rewards.</Sidenote></p> [Django's security policy](https://docs.djangoproject.com/en/dev/internals/security/#ai-assisted-reports), updated in July 2025, still names *"inaccurate, misleading, or fictitious content"* as a primary intake concern. The smaller programs and platform-funded mechanisms that supported the long tail of open-source projects do not yet have the maintainer celebrity, the engineering capacity, or the audience for public bans—and the slop wave is still washing over them.
+But this is only one half of the picture. <p id="p-ibb">The Internet Bug Bounty has paused payouts to upstream open-source projects, and <a href="https://nodejs.org/en/blog/announcements/discontinuing-security-bug-bounties">Node.js formally announced</a> it could no longer offer monetary rewards for vulnerability reports—while continuing to accept and triage security submissions through HackerOne. Node.js had relied on IBB funding for its bug bounty since 2016.<Sidenote id="s3" anchor="p-ibb" num="3">The IBB is a pooled-donation funding mechanism that paid bounty rewards on behalf of open-source projects. It is not a bug bounty platform; it is the funding source that made platforms like HackerOne viable for projects that could not self-fund rewards.</Sidenote></p> [Django's security policy](https://docs.djangoproject.com/en/dev/internals/security/#ai-assisted-reports) still names *"inaccurate, misleading, or fictitious content"* as a primary intake concern. The smaller programs and platform-funded mechanisms that supported the long tail of open-source projects do not yet have the maintainer celebrity, the engineering capacity, or the audience for public bans—and the slop wave is still washing over them.
 
-Two surfaces, the same underlying failure, and a trajectory pointing in only one direction.
+As it now appears, these are two surfaces, the same underlying failure, and a trajectory pointing in only one direction.
 
-Thomas Ptacek's [March 30 essay "Vulnerability Research Is Cooked"](https://sockpuppet.org/blog/2026/03/30/vulnerability-research-is-cooked/) put the trajectory in writing: *"Within the next few months, coding agents will drastically alter both the practice and the economics of exploit development."* He was responding in part to [Nicholas Carlini's "Black-hat LLMs" talk at \[un\]prompted 2026 and his *Security Cryptography Whatever* interview](https://securitycryptographywhatever.com/2026/03/25/ai-bug-finding/)—Carlini works with Anthropic's Frontier Red Team. Ptacek summarized Carlini's process: *"feeding Claude Code repositories with a repeated prompt across source files asking for exploitable vulnerabilities, then verifying results through subsequent runs. The success rate of that pipeline: almost 100%."* In the nine days since Ptacek published, his forecast has been overtaken by Anthropic's own announcements—the Mythos Preview assessment and Project Glasswing, both in [§6.5](#65-ai-assisted-research-and-the-inflation-pressure). The cost of producing a fluent, technically-grounded vulnerability report has collapsed. The cost of producing a *correctly-scoped* one has not.
+Thomas Ptacek's [March 30 essay "Vulnerability Research Is Cooked"](https://sockpuppet.org/blog/2026/03/30/vulnerability-research-is-cooked/) put the trajectory in writing: *"Within the next few months, coding agents will drastically alter both the practice and the economics of exploit development."* He was responding in part to [Nicholas Carlini's "Black-hat LLMs" talk at \[un\]prompted 2026 and his *Security Cryptography Whatever* interview](https://securitycryptographywhatever.com/2026/03/25/ai-bug-finding/)—Carlini works with Anthropic's Frontier Red Team. Ptacek summarized Carlini's process: *"feeding Claude Code repositories with a repeated prompt across source files asking for exploitable vulnerabilities, then verifying results through subsequent runs. The success rate of that pipeline: almost 100%."* Within days of Ptacek publishing, his forecast was overtaken by Anthropic's own announcements—the Mythos Preview assessment and Project Glasswing, both in [§6.5](#65-ai-assisted-research-and-the-inflation-pressure). The cost of producing a fluent, technically-grounded vulnerability report has collapsed. The cost of producing a *correctly-scoped* one has not.
 
-<p id="p-spence">This is not a new pattern. Michael Spence published the underlying mechanism in 1973.<Sidenote id="s1" anchor="p-spence" num="1">Spence won the Nobel Prize in Economics in 2001 for this work. The signaling framework has been applied to markets from education to insurance to advertising—but not, until this post, to vulnerability disclosure.</Sidenote></p>
+<p id="p-spence">We can clearly say that this is not a new pattern, as Michael Spence published the underlying mechanism in 1973.<Sidenote id="s1" anchor="p-spence" num="1">Spence won the Nobel Prize in Economics in 2001 for this work. The signaling framework has been applied to markets from education to insurance to advertising—but not, until this post, to vulnerability disclosure.</Sidenote></p>
 
 > *"It is not difficult to see that a signal will not effectively distinguish one applicant from another, unless the costs of signaling are negatively correlated with productive capability. For if this condition fails to hold, given the offered wage schedule, everyone will invest in the signal in exactly the same way, so that they cannot be distinguished on the basis of the signal."*
 >
 > — Michael Spence, ["Job Market Signaling,"](https://www.sfu.ca/~allen/Spence.pdf) *Quarterly Journal of Economics*, Vol. 87, No. 3, 1973, p. 358
 
-Replace *applicant* with *vulnerability report*. Replace *employer* with *maintainer or bug bounty triager*. Replace *productive capability* with *correctly-scoped, in-charter security finding*. The 1973 paper now describes the 2026 disclosure equilibrium with disquieting precision. Severity inflation is not a researcher character flaw and has never been one. It is the predictable output of a signaling system in which the cost of producing a confident, fluent, technically-grounded report has dropped to nearly zero, while the cost of producing a *correctly-scoped* one has not. Honest researchers look exactly like inflators, because the gate is on the wrong side. **Production is cheap. Discrimination is not.**
+Replace *applicant* with *vulnerability report*. Replace *employer* with *maintainer or bug bounty triager*. Replace *productive capability* with *correctly-scoped, in-charter security finding*. The 1973 paper now describes the 2026 disclosure equilibrium with disquieting precision. Severity inflation is not a researcher character flaw and has never been one. It is the predictable output of a signaling system in which the cost of producing a confident, fluent, technically-grounded report has dropped to nearly zero, while the cost of producing a *correctly-scoped* one has not. Honest researchers look exactly like inflators, because the signal no longer separates them. **Production is cheap. Discrimination is not.**
 
-By *production* I mean the marginal cost per report—under \$50 for a FreeBSD exploit, \$1.22 per smart-contract agent run, both numbers from [§6.5](#65-ai-assisted-research-and-the-inflation-pressure). By *discrimination* I mean the human cost of distinguishing a real finding from an inflated one, which has not scaled with production cost. The asymmetry is between marginal production and marginal validation, not absolute totals.
+By *production* I mean the marginal cost per report—under \$50 per OpenBSD scaffold run, \$1.22 per smart-contract agent run, both numbers from [§6.5](#65-ai-assisted-research-and-the-inflation-pressure). By *discrimination* I mean the human cost of distinguishing a real finding from an inflated one, which has not scaled with production cost. The asymmetry is between marginal production and marginal validation, not absolute totals.
 
 Whether the asymmetry persists as tools improve is an open question. The structural argument here depends on it surviving the next round of capability scaling, and I do not yet have a good answer for what happens when it does not.
 
-The LLM era did not invent this problem. It removed the friction that previously slowed it down, then it removed the fabricated-report subset of it at the well-defended frontier, and what remains is the harder version: technically-correct reports that overclaim their security relevance, arriving at unprecedented volume, to maintainers who can no longer afford the cost of evaluating each one on its merits. Tarreau, in a comment under Stenberg's LinkedIn post, named the fix exactly: *"It's time to update the reporting rules to reduce the overhead by making the LLM+reporter do a larger share of the work to reduce the time spent triaging."*
+The LLM era did not invent this problem. Rather, it removed the friction that previously slowed it down, then it removed the fabricated-report subset of it at the well-defended frontier, and what remains is the harder version: technically-correct reports that overclaim their security relevance, arriving at unprecedented volume, to maintainers who can no longer afford the cost of evaluating each one on its merits. Tarreau, in a comment under Stenberg's LinkedIn post, named the fix exactly: *"It's time to update the reporting rules to reduce the overhead by making the LLM+reporter do a larger share of the work to reduce the time spent triaging."*
 
-Tarreau is calling for systemic rule changes—institutional updates to how reporting works at the platform and project level. This post offers something narrower: one researcher-side response that does not require waiting for systemic change, the kind of discipline that rule changes would eventually formalize but that researchers do not need to wait for. It describes:
+Tarreau is calling for systemic rule changes, namely, institutional updates to how reporting works at the platform and project level. This post offers something narrower: one researcher-side response that does not require waiting for systemic change, the kind of discipline that rule changes would eventually formalize but that researchers do not need to wait for. It describes:
 
 - **(a)** the inflation antipatterns I have catalogued in my own corrections corpus
 - **(b)** the six-gate quality gate plus the adversarial review protocol I now run before every disclosure
@@ -143,13 +143,13 @@ Tarreau is calling for systemic rule changes—institutional updates to how repo
 
 Last quarter I submitted a vulnerability report to a bug bounty program. The finding was real—a security issue in a desktop application that I had verified end-to-end and could reproduce on demand. The report entered triage. Over the weeks that followed, while the team performed its detailed review, I went back and re-read what I had written.
 
-What I found was a report that did not match the bug.
+What I found was a report that did not exactly match the bug.
 
-I had called the finding "RCE" when it was localhost-only. I had called it "zero-click" when the attack required a specific application state. I had stacked four CWE identifiers to make the finding look more severe. I had written a 1,200-word scope argument because the bug sat near a program boundary I knew was contested. I had opened with the sentence *"no claims in this report are speculative"*—and several were. Every one of these moves was something I would have flagged in someone else's report. In my own, I did not see them until the bug was no longer the first thing in my head.
+I had labeled the finding as remote code execution when the attack required local access. I had called it "zero-click" when the attack required a specific application state. I had stacked four CWE identifiers to make the finding look more severe. I had written an insanely lengthy scope argument because the bug sat near a program boundary I knew was contested. I had opened with the sentence *"no claims in this report are speculative"*—and several were. Every one of these moves was something I would have flagged in someone else's report. In my own, I did not see them until the bug was no longer the first thing in my head.
 
 I tried to correct the record. While the program was still in detailed triage, I submitted a follow-up rejoinder with the PoC artifacts, the exact reproduction environment, and a deflated impact restatement that walked back every one of the inflations above. <p id="p-informative">The program closed the original report Informative, with the disposition <em>"no security impact."</em> The technical core of the bug was lost in the noise of the framing I had wrapped around it.<Sidenote id="s4" anchor="p-informative" num="4">In HackerOne's taxonomy, "Informative" means the triager acknowledges receiving the report but does not consider it actionable as a security finding. It is not a rejection of the bug's existence—it is a judgment that the report does not warrant a security response.</Sidenote></p>
 
-The triager response was rational. The severity-inflation cues—overstated capability, overstated attacker model, padded CWE list, defensive credibility preamble—gave them enough reason to evaluate the report on its framing before the technical body became the deciding factor. This is what a credibility-signal failure looks like from the inside. They did not reject my technical claim. They rejected my framing, and through it, the credibility I needed for the technical claim to be heard.
+The triager response was rational. The severity-inflation cues (overstated capability, overstated attacker model, padded CWE list, defensive credibility preamble) gave them enough reason to evaluate the report on its framing before the technical body became the deciding factor. This is what a credibility-signal failure typically looks like from the inside. It wasn't exactly my technical claim that got rejected. Rather, they rejected my framing, and through it, the credibility I needed for the technical claim to be heard.
 
 The rest of this post is about closing that gap before it forces someone else to do it for me.
 
@@ -157,7 +157,7 @@ The rest of this post is about closing that gap before it forces someone else to
 
 ## 2.5. This is not just my problem
 
-If the rejection of one report were a sample size of one, it would not be worth a post. But the patterns in my own corrections corpus map almost exactly onto patterns visible in public—at every scale of program, in every corner of the disclosure ecosystem.
+If the rejection of one report were merely a sample size of one, it would not be worth a post. But the patterns in my own corrections corpus map almost exactly onto patterns visible in public—at every scale of program, in every corner of the disclosure ecosystem.
 
 Some of the evidence is in the maintainer voices already cited in [§1](#1-the-slop-crisis-didnt-end-it-bifurcated). Stenberg's *"things we deem not having security properties"* is the inflation antipattern in its purest form: technically correct, formally a bug, presented as a security finding when the maintainer would not consider it one. Tarreau's *"duplicate reports… the same bug found by two different people using slightly different tools"* is the same failure mode at the volume floor: when many reporters apply the same AI tooling to the same source tree, the per-report credibility cost collapses to nothing, and the only signal a triager can act on is whether *this particular report* looks like the one that came in twenty minutes ago.
 
@@ -171,17 +171,17 @@ But the strongest evidence is something every reader can verify in a browser. [c
 
 The page is full of these.
 
-Read those titles aloud. Every one of them describes a finding that *sounds* security-relevant. Several use words drawn directly from the standard inflation lexicon—*bypass*, *injection*, *heap corruption*, *race condition*, *use-after-free*. The reports themselves, viewed in detail, are not fabricated. They are the work of researchers who put real effort in. And the curl maintainers—at the well-defended frontier of the open-source security ecosystem, in a project whose triagers are almost certainly better at this than the median program—closed every one of these as Informative. This is the inflation problem made publicly visible. Not as theory. Not as anecdote. As a live page anyone can refresh.
+When you read those titles aloud, every one of them describes a finding that *sounds* security-relevant. Several use words drawn directly from the standard inflation lexicon—*bypass*, *injection*, *heap corruption*, *race condition*, *use-after-free*. The reports themselves, viewed in detail, are not fabricated. They are the work of researchers who put real effort in. And the curl maintainers—at the well-defended frontier of the open-source security ecosystem, in a project whose triagers are almost certainly better at this than the median program—closed every one of these as Informative. This is the inflation problem made publicly visible. Not as theory. Not as anecdote. As a live page anyone can refresh.
 
-What follows is my attempt at a structural answer to the failure mode the curl page makes visible. None of the nine antipatterns in [§4](#4-a-taxonomy-of-researcher-side-severity-inflation-antipatterns) came from a literature review. They came from grepping my own corrections corpus, the same way Stenberg reads through his HackerOne queue. The taxonomy I present is open by construction: every researcher's corrections file will surface variants and edge cases I have not seen. The community evidence above is offered as proof that the underlying signal failure is real, widespread, and currently visible in places nobody is hiding.
+What follows is my attempt at a structural answer to the failure mode the curl page makes visible. None of the nine antipatterns in [§4](#4-a-taxonomy-of-researcher-side-severity-inflation-antipatterns) came from a literature review. They came from grepping my own corrections corpus, the same way Stenberg reads through his HackerOne queue. The taxonomy I present is open by construction: every researcher's corrections file (that is, if they keep one) will surface variants and edge cases I have not seen. The community evidence above is offered as proof that the underlying signal failure is real, widespread, and currently visible in places nobody is hiding.
 
 ---
 
 ## 3. The rubric as instrument: three calibration points
 
-The lesson of [§2](#2-a-motivating-case) is not "I made a mistake." It is that I made a mistake I had no consistent way to *see in time*. The nine inflation antipatterns I describe in [§4](#4-a-taxonomy-of-researcher-side-severity-inflation-antipatterns) emerged from that gap—a written list of failure modes I extracted from my own corrections corpus to make next-time recognition cheaper than next-time regret.
+The lesson of [§2](#2-a-motivating-case) is not simply "I made a mistake." It is that I made a mistake I had no consistent way to *see in time*. The nine inflation antipatterns I describe in [§4](#4-a-taxonomy-of-researcher-side-severity-inflation-antipatterns) emerged from that gap—a written list of failure modes I extracted from my own corrections corpus to make next-time recognition cheaper than next-time regret.
 
-But a list is a memory aid, not an instrument. To turn it into something that could actually catch a failing report before submission, I needed two more components: a numerical scoring rubric, and a threshold below which a report does not get sent. I built both, then went back and scored three reports against them—the original rejected submission, the rejoinder I submitted to correct the record while detailed triage was still in progress, and a new finding I pivoted to after the close. The calibration point I want to share is what those three scores look like next to their actual outcomes.
+But a list is a memory aid, and not an instrument. To turn it into something that could actually catch a failing report before submission, I needed two more components: a numerical scoring rubric, and a threshold below which a report does not get sent. I built both, then went back and scored three reports against them—the original rejected submission, the rejoinder I submitted to correct the record while detailed triage was still in progress, and a new finding I pivoted to after the close. The calibration point I want to share is what those three scores look like next to their actual outcomes.
 
 | Submission | Rubric score | Verdict | Actual outcome |
 |---|---|---|---|
@@ -199,7 +199,7 @@ One thing this section is *not*: an empirical measurement of inflation rates acr
 
 The third row is the one I find most honest. The new finding, written with the gate enforced from the first sentence, scored 33/35. It is not 35/35. The remaining gap is real and maps to specific weaknesses—one dimension on attacker model precision, one on the claim-to-evidence ratio in a section where I had inferred from code analysis without an empirical test. A rubric that consistently produces 35/35 scores has stopped being an instrument. It has become a stamp.
 
-**This is calibration, not validation.** The rubric was built on my own failures, scored against my own retrospective judgment, with two distinct content cases plus a retrospective re-score of the first. The shape it found is real but the sample is smaller than n=3 suggests. I am publishing it as a worked instrument, not as a proven predictor—and the falsifiable version of the claim, the one the rubric will succeed or fail against as the corpus grows, is this: *reports scoring below 21 close as Informative or N/A at materially higher rates than reports scoring above 28, controlling for finding type and program.* I will publish updated data as the corpus grows, regardless of whether it confirms the threshold or kills it. [§7](#7-limits-and-failure-modes) returns to the rubric's deeper limits—selection effects, the under-claiming asymmetry, and the cases where this whole approach over-corrects.
+**This is calibration, not validation.** The rubric was built on my own failures, scored against my own retrospective judgment, with two distinct content cases plus a retrospective re-score of the first. The shape it found is real but the sample is smaller than n=3 suggests. A rubric designed against a failure will always retroactively explain that failure—the risk is rationalization with structure, and I do not claim to have fully escaped it. I am publishing it as a worked instrument, not as a proven predictor—and the falsifiable version of the claim, the one the rubric will succeed or fail against as the corpus grows, is this: *reports scoring below 21 close as Informative or N/A at materially higher rates than reports scoring above 28, controlling for finding type and program.* I will publish updated data as the corpus grows, regardless of whether it confirms the threshold or kills it. [§7](#7-limits-and-failure-modes) returns to the rubric's deeper limits—selection effects, the under-claiming asymmetry, and the cases where this whole approach over-corrects.
 
 None of this is the first time a researcher has built a personal scoring rubric for vulnerability reports. Bugcrowd, HackerOne, ZDI, and most major bug bounty platforms have published triage criteria; experienced researchers at boutique consultancies, in-house red teams, and as independent operators have run informal versions of the same exercise for years. What I claim is novel here is not the existence of researcher-side discipline, but the cognitive-bias mapping in [§4](#4-a-taxonomy-of-researcher-side-severity-inflation-antipatterns) and the AI-side adversarial enforcement structure in [§6.5](#65-ai-assisted-research-and-the-inflation-pressure)—both responses to a problem older bug bounty culture solved through experience and apprenticeship, that the current environment makes harder to solve that way.
 
@@ -209,7 +209,7 @@ None of this is the first time a researcher has built a personal scoring rubric 
 
 These patterns surfaced from auditing my own corrections corpus, a history of `corrections.md` files I maintain following reviews of my reports. They are not the result of a systematic ecosystem study, and I make no claim that this list is exhaustive. But the patterns below have public analogues—a triager complaint, a hunter post-mortem, a program manager thread—and the rubric in the next section was designed against this catalogue. Read it as an open taxonomy, and not a closed survey.
 
-Each entry is a failure mode I have committed in writing, the cognitive mechanism that produced it, and the way the gate counters it. The mechanism column matters because the gate is not a content rule. It is a debiasing instrument, and a debiasing instrument only works when you can name the bias it counters.
+The antipatterns below are the cognitive mechanisms through which the structural inflation described in [§1](#1-the-slop-crisis-didnt-end-it-bifurcated) expresses itself in individual reports. The cost asymmetry creates the conditions; these biases do the work. Each entry is a failure mode I have committed in writing, the cognitive mechanism that produced it, and the way the gate counters it. The mechanism column matters because the gate is not a content rule. It is a debiasing instrument, and a debiasing instrument only works when you can name the bias it counters.
 
 A note on what this taxonomy is and is not: it covers *severity-and-scope inflation*—researchers presenting findings as more impactful than the underlying bug warrants. It does not cover *scope mismatch*, the related failure mode where a real bug is submitted in good faith but falls outside the maintainer's definition of security. The two often look identical from inside a triage queue, but they are different problems with different fixes. The Quality Gate addresses inflation. Scope mismatch is somebody else's post.
 
@@ -416,17 +416,14 @@ Until last night, the empirical case for this claim rested on inference from the
 
 ### The Frontier Red Team trajectory
 
-This is not only an Anthropic story. [Google Project Zero published "From Naptime to Big Sleep"](https://googleprojectzero.blogspot.com/2024/10/from-naptime-to-big-sleep.html) in November 2024—the first widely-cited demonstration of LLM-driven vulnerability discovery in production code. [Sean Heelan used OpenAI's o3 to find CVE-2025-37899](https://sean.heelan.io/2025/05/22/how-i-used-o3-to-find-cve-2025-37899-a-remote-zeroday-vulnerability-in-the-linux-kernels-smb-implementation/)—a real Linux kernel SMB zero-day—in May 2025. [Joshua Rogers documented 49 completed AI-assisted curl PRs](https://joshua.hu/llm-engineer-review-sast-security-ai-tools-pentesters) in October 2025, on the maintainer side rather than the lab side. The Frontier Red Team arc that follows sits inside a broader story of which Anthropic is one node—but the most legible single arc to walk through is the one Anthropic published in chronological order, so that is the one I work with here.
+This is not only an Anthropic story. [Google Project Zero published "From Naptime to Big Sleep"](https://googleprojectzero.blogspot.com/2024/10/from-naptime-to-big-sleep.html) in October 2024—the first widely-cited demonstration of LLM-driven vulnerability discovery in production code. [Sean Heelan used OpenAI's o3 to find CVE-2025-37899](https://sean.heelan.io/2025/05/22/how-i-used-o3-to-find-cve-2025-37899-a-remote-zeroday-vulnerability-in-the-linux-kernels-smb-implementation/)—a real Linux kernel SMB zero-day—in May 2025. [Joshua Rogers tested AI-native SAST tools against critical open-source projects including curl, sudo, and Squid](https://joshua.hu/llm-engineer-review-sast-security-ai-tools-pentesters) in 2025, documenting real vulnerabilities found by automated scanning on the maintainer side rather than the lab side. The Frontier Red Team arc that follows sits inside a broader story of which Anthropic is one node—but the most legible single arc to walk through is the one Anthropic published in chronological order, so that is the one I work with here.
 
 For the past ten months, [Anthropic's Frontier Red Team](https://red.anthropic.com/) has been publishing cybersecurity capability assessments. The arc is unmistakable:
 
 - **[June 2025](https://red.anthropic.com/2025/cyber-toolkits/index.html):** LLMs needed custom toolkits to compromise simulated networks; without them, near-total failure
-- **[August 2025](https://red.anthropic.com/2025/cyber-competitions/):** Claude finished top 3% in PicoCTF (297th of 10,460 teams)
-- **[September 2025](https://red.anthropic.com/2025/ai-for-cyber-defenders/):** The team named the moment: *"an inflection point for AI's impact on cybersecurity"*
 - **[December 2025](https://red.anthropic.com/2025/smart-contracts/):** \$4.6M in post-knowledge-cutoff smart contract exploits at \$1.22 per agent run, revenue *"roughly doubl[ing] every 1.3 months"*
-- **[January 2026](https://red.anthropic.com/2026/cyber-toolkits-update/):** Autonomous success on Equifax cyber range—no custom toolkit required
 - **[February 2026](https://red.anthropic.com/2026/zero-days/):** 500+ validated high-severity vulnerabilities in continuously-fuzzed OSS projects
-- **[March 2026](https://red.anthropic.com/2026/firefox/):** 22 Firefox vulns in two weeks, 14 high-severity (~19% of all 2025 high-sev Firefox CVEs), \$4,000 in API credits
+- **[March 2026](https://red.anthropic.com/2026/firefox/):** 22 Firefox vulns in two weeks, 14 high-severity (almost a fifth of all 2025 high-sev Firefox CVEs), \$4,000 in API credits
 
 Then on the evening of April 7, the same team published [the Mythos Preview assessment](https://red.anthropic.com/2026/mythos-preview/).
 
@@ -434,13 +431,16 @@ Then on the evening of April 7, the same team published [the Mythos Preview asse
 
 Anthropic's Frontier Red Team—including Nicholas Carlini, whose [un]prompted 2026 talk and *Security Cryptography Whatever* interview were the forward-looking voices in [§1](#1-the-slop-crisis-didnt-end-it-bifurcated)—published a research preview of Claude Mythos, an unreleased frontier model. The relevant numbers, verbatim:
 
-- **Firefox exploits:** Mythos achieved **181 successful exploits**, against Opus 4.6's *"two times out of several hundred attempts"*
-- **[OSS-Fuzz](https://google.github.io/oss-fuzz/):** **595 crashes at tiers 1 and 2**, plus *"ten separate, fully patched targets (tier 5)"*
-- **OpenBSD:** *"A thousand runs through our scaffold… under \$20,000"*
-- **FreeBSD:** an exploit for a 17-year-old NFS RCE (CVE-2026-4747) completed *"after several hours"* at under \$50 per individual run
-- **FFmpeg:** several hundred runs over the repository for roughly \$10,000
-- **Validator agreement:** **89% of 198 manually reviewed vulnerability reports** matched Claude's severity assessment exactly
-- **Historical bugs found:** a 27-year-old OpenBSD SACK bug (DoS-grade crash of any OpenBSD host), a 16-year-old FFmpeg H.264 vulnerability, the FreeBSD NFS RCE above (unauthenticated remote root), a guest-to-host VMM vulnerability *despite Rust*, and Linux kernel privilege escalations chaining [KASLR](https://en.wikipedia.org/wiki/Address_space_layout_randomization) bypasses with use-after-frees
+| Benchmark | Result |
+|---|---|
+| **Firefox exploits** | **181 successful exploits** (Opus 4.6: *"two times out of several hundred attempts"*) |
+| **[OSS-Fuzz](https://google.github.io/oss-fuzz/)** | **595 crashes** at tiers 1–2, plus *"ten separate, fully patched targets (tier 5)"* |
+| **OpenBSD** | *"A thousand runs through our scaffold… under \$20,000"* |
+| **FreeBSD** | 17-year-old NFS RCE (CVE-2026-4747) exploited fully autonomously *"after several hours"* |
+| **FFmpeg** | Several hundred runs across the repository for roughly \$10,000 |
+| **Validator agreement** | **89% of 198 manually reviewed reports** matched Claude's severity assessment exactly |
+
+Among the historical bugs surfaced: a 27-year-old OpenBSD SACK bug (DoS-grade crash of any OpenBSD host), a 16-year-old FFmpeg H.264 vulnerability, the FreeBSD NFS RCE above (unauthenticated remote root), a guest-to-host VMM vulnerability *despite Rust*, and Linux kernel privilege escalations chaining [KASLR](https://en.wikipedia.org/wiki/Address_space_layout_randomization) bypasses with use-after-frees.
 
 One caveat: *these numbers are Anthropic's own.* They have not been independently verified, and Mythos Preview itself is not yet generally available. They should be read as the producing lab's report on its own model—load-bearing for what Anthropic publicly claims, not for what an external researcher could currently reproduce. And *"181 successful exploits"* is a count of successful runs in a process designed to find them, not a measurement of underlying capability. The argument does not require the numbers to be exact. It requires the trend to be real, and the trend is corroborated by the ten-month arc above and the independent maintainer voices in [§1](#1-the-slop-crisis-didnt-end-it-bifurcated).
 
@@ -458,7 +458,7 @@ To be fair to Anthropic's framing: they explicitly say the long-term picture is 
 
 The same evening, Anthropic [announced Project Glasswing](https://www.anthropic.com/glasswing)—a coalition of twelve launch partners (AWS, Apple, Google, Microsoft, Cisco, CrowdStrike, JPMorganChase, the Linux Foundation, NVIDIA, Palo Alto Networks, Broadcom, and Anthropic itself), plus more than forty additional organizations, committing **\$100 million in Mythos Preview usage credits and \$4 million in direct donations** to open-source security (\$2.5M to Alpha-Omega and the OpenSSF, \$1.5M to the Apache Software Foundation), with the explicit goal of *"identif[ying] and remediat[ing] zero-day vulnerabilities in critical software before malicious actors exploit them."*
 
-Read the two announcements together and the structural picture is impossible to miss. **A frontier lab that did not set out to build a vulnerability research engine has built one anyway, by accident, as a downstream effect of scaling. The same lab is responding by trying to give the engine to defenders before it leaks to attackers.** Three of the partner CSOs:
+Read the two announcements together and the structural picture is impossible to miss. **A frontier lab that did not set out to build a vulnerability research engine has built one anyway, by accident, as a downstream effect of scaling. The same lab is now trying to deploy it defensively before the capability diffuses.** Three of the partner CSOs:
 
 - **Cisco's Anthony Grieco:** *"AI capabilities have crossed a threshold that fundamentally changes the urgency required to protect critical infrastructure from cyber threats, and there is no going back. … That is a profound shift, and a clear signal that the old ways of hardening systems are no longer sufficient."*
 - **CrowdStrike's CTO Elia Zaitsev:** *"The window between a vulnerability being discovered and being exploited by an adversary has collapsed—what once took months now happens in minutes with AI."*
@@ -469,11 +469,14 @@ Read the two announcements together and the structural picture is impossible to 
 The Spence cost asymmetry is now visible in dollars.
 
 **Production side:**
-- Smart contract exploits: \$1.22 per agent run, exploit revenue doubling every 1.3 months
-- Firefox: \$4,000 in API credits → 22 vulnerabilities, 14 high-severity, ~19% of all 2025 high-sev Firefox CVEs
-- OpenBSD: \$20,000 across 1,000 scaffold runs
-- FreeBSD: under \$50 for a single run that yielded a 17-year-old unauthenticated remote root
-- FFmpeg: ~\$10,000 across several hundred runs
+
+| Target | Cost | Yield |
+|---|---|---|
+| Smart contracts | \$1.22 per agent run | \$4.6M in exploits, revenue doubling every 1.3 months |
+| Firefox | \$4,000 in API credits | 22 vulnerabilities, 14 high-severity (almost a fifth of all 2025 high-sev Firefox CVEs) |
+| OpenBSD | \$20,000 total (under \$50 per run) | 1,000 scaffold runs, including a 27-year-old SACK bug |
+| FreeBSD | Not disclosed | 17-year-old unauthenticated remote root (CVE-2026-4747), fully autonomous |
+| FFmpeg | ~\$10,000 | Several hundred runs across the repository |
 
 **Validation side:**
 - Even Anthropic—the lab building the production engine—reports its results against a human-validator agreement bar. In their published numbers, expert contractors agreed exactly with Claude's severity assessment in 89% of 198 manually reviewed reports, and within one severity level in 98%. The point is not that the model is bad—the model is impressively good—but that **even at 89% exact and 98% within-one-level agreement, Anthropic still uses human validators as a structural check.** The validation engine and the production engine are not the same thing, even when they are running on the same model.
@@ -490,13 +493,13 @@ Everything in [§4](#4-a-taxonomy-of-researcher-side-severity-inflation-antipatt
 
 **2. Fluent overclaim.** LLMs produce confident, structurally correct prose in a register that *resembles* technical rigor without producing it. The Mozilla collaboration post notes that *"Claude is much better at finding these bugs than it is at exploiting them"*—and the linguistic surface of an LLM-generated report tracks production speed rather than validation depth. A reader has no way to tell from the prose alone which side of the gap a claim sits on.
 
-**3. Hallucinated corroboration.** Ask a model to draft an evidence section, and it will fill in specific facts that *fit the shape* of evidence sections it has seen during training, rather than facts grounded in your actual artifacts. [Antipattern #5 from [§4](#4-a-taxonomy-of-researcher-side-severity-inflation-antipatterns)](#5-writing-evidence-from-memory) (writing evidence from memory) is dramatically worse when the memory in question is the model's, not the researcher's.
+**3. Hallucinated corroboration.** Ask a model to draft an evidence section, and it will fill in specific facts that *fit the shape* of evidence sections it has seen during training, rather than facts grounded in your actual artifacts. [Antipattern #5 from §4](#5-writing-evidence-from-memory) (writing evidence from memory) is dramatically worse when the memory in question is the model's, not the researcher's.
 
 **4. Evidence-from-model-memory.** Distinct from #3. After an extended conversation with a model about a finding, the researcher's own memory of *what was observed* and *what the model said about it* compress into a single recollection. Days later, the researcher is no longer sure which assertions came from artifacts and which from the model's confident summarization. This is the failure mode the post-research-audit skill was built to surface.
 
 ### My research methodology
 
-What follows is one specific structural answer—mine. Not the right one, not the only one; *a* worked example of the validation infrastructure the current environment requires.
+Glasswing is the institutional answer—\$100 million deployed across a coalition of twelve organizations. What follows is the individual one: one researcher's validation infrastructure, built at the desk, with the same model that produces the findings it audits. Not the right answer, not the only one; *a* worked example of the validation discipline the current environment requires.
 
 I run a multi-skill agentic research workflow built on Claude Code. Six skills, each enforcing a discrete phase: target scoping, research conventions, security research, post-research audit, disclosure, and an orchestrator that runs the whole pipeline through phase gates. Scoping forces an attacker model and an attack-surface enumeration *before* any deep work begins—a debiasing instrument that makes the researcher commit to what would constitute a finding before any emotional investment in finding one. Research conventions enforces evidence discipline during active investigation: every claim must cite a `file:line` reference or attached artifact, no exceptions (exactly the rule from [§4 entry 5](#5-writing-evidence-from-memory)). The orchestrator refuses to advance phases until the prior phase's exit criteria are met. The disclosure skill enforces the [§5](#5-the-quality-gate-six-checks) Quality Gate plus the [§6](#6-the-adversarial-review-protocol) adversarial review before any report is sent.
 
@@ -530,13 +533,13 @@ The production side of this equation has been built—by Anthropic, by the other
 
 AI did not cause severity inflation. It removed the friction that previously slowed it down—first at the report-generation layer (the slop crisis in [§1](#1-the-slop-crisis-didnt-end-it-bifurcated)), now at the vulnerability-discovery layer itself. Every researcher who uses AI in their workflow has a choice: use it as a stamp, or structure it as an adversary. The post-research-audit skill is one worked example of the second choice. *There need to be others, fast.*
 
-[§7](#7-limits-and-failure-modes) follows with the limits of this approach—including the cases where the validation engine I have just described fails on its own terms.
+What follows in [§7](#7-limits-and-failure-modes) are the limits of this approach—including the cases where the validation engine I have just described fails on its own terms.
 
 ---
 
 ## 7. Limits and failure modes
 
-The Quality Gate is a debiasing instrument built by one researcher against the failure modes of one researcher's prior reports. Its limits are real and worth naming explicitly. I prefer to name them here rather than have a triager name them for me.
+The Quality Gate is a debiasing instrument built by one researcher against the failure modes of one researcher's prior reports. Its limits are real, and worth naming explicitly—I would rather name them here than have a triager name them for me.
 
 ### Where the rubric over-corrects: under-claiming
 
@@ -562,7 +565,7 @@ The counterweight does not invalidate the OSS-maintainer crisis. It specifies th
 
 ### AI-as-enforcer failure modes
 
-Section 6.5 argues that the same model that produces inflated reports can be structured adversarially to validate them. That argument is true on average. It is not always true. The post-research-audit skill has its own failure modes, which I have observed in my own use:
+Section 6.5 argues that the same model that produces inflated reports can be structured adversarially to validate them. That argument is true on average, but it is not always true. The post-research-audit skill has its own failure modes, which I have observed in my own use:
 
 - **Model laziness.** When asked to audit a long report, the model sometimes defaults to skimming—performing a structurally complete audit that hits all eleven sections without engaging with the technical claims at the level the rules require. The fix is forcing the model to atomize every claim *before* the audit begins, and verifying the atomization is complete before verdicts get written.
 - **Pattern-matching to past reports.** If the model has reviewed several of my prior reports in a session, it develops a template for *what my reports look like* and audits against the template rather than the current report. The fix is starting each audit in a fresh session with no prior context.
@@ -571,26 +574,26 @@ Section 6.5 argues that the same model that produces inflated reports can be str
 
 These failure modes are not arguments against the validation infrastructure approach. They are arguments for treating the infrastructure as an evolving instrument that needs to be audited against its own outputs the same way the rubric audits the report.
 
-[§8](#8-what-this-generalizes-to) considers what this generalizes to beyond bug bounty disclosure.
+What remains is the question of what this generalizes to beyond bug bounty disclosure.
 
 ---
 
 ## 8. What this generalizes to
 
-The post has been about vulnerability disclosure to bug bounty programs and open-source maintainers. The signaling failure described in [§1](#1-the-slop-crisis-didnt-end-it-bifurcated) is more general. It exists wherever a claim and its evidence are evaluated by separate parties under time pressure, with the evaluator unable to verify each claim individually and the claimant incentivized to make the claim as compelling as possible. The bug bounty form is one instance. There are at least four others:
+Up to this point, the post has been about vulnerability disclosure to bug bounty programs and open-source maintainers. But the signaling failure described in [§1](#1-the-slop-crisis-didnt-end-it-bifurcated) is more general. It exists wherever a claim and its evidence are evaluated by separate parties under time pressure, with the evaluator unable to verify each claim individually and the claimant incentivized to make the claim as compelling as possible. The bug bounty form is one instance. There are at least four others:
 
 - **Academic CVE assignment and peer review**—same asymmetric information, same triage under time pressure. The 2024 Linux kernel CNA reorganization—now the largest CVE issuer by volume—is the same crisis in a different bureaucratic layer.
 - **Vendor disclosure outside bug bounty**—no platform triage layer to absorb inflated framing. The vendor's first impression is the entire impression. The gate matters *more* here, not less.
 - **Internal red team reporting**—same incentives. The red team wants findings taken seriously, the product team has limited triage capacity, the social cost of overclaiming is paid in credibility on the next engagement.
 - **Conference talk submissions and CFP review**—a talk abstract is a claim. The reviewers cannot verify the underlying research individually. The temptation to overclaim novelty, scope, or impact is exactly what the nine antipatterns describe.
 
-In every one of these contexts, the post-research-audit shape from [§6.5](#65-ai-assisted-research-and-the-inflation-pressure) and the gate from [§5](#5-the-quality-gate-six-checks) will catch the same failures they catch in bug bounty disclosure. The instrument is calibrated against bug bounty culture in 2024–2026, but the underlying mechanism—debiasing the producer of a claim against their own incentives before the consumer has to do it for them—is general. The Quality Gate is one operationalization. There are others, and they should be built.
+In every one of these contexts, the Spence condition holds: the cost of producing a confident claim has decoupled from the cost of producing a correctly-scoped one. The post-research-audit shape from [§6.5](#65-ai-assisted-research-and-the-inflation-pressure) and the gate from [§5](#5-the-quality-gate-six-checks) will catch the same failures they catch in bug bounty disclosure. The instrument is calibrated against bug bounty culture in 2024–2026, but the underlying mechanism—debiasing the producer of a claim against their own incentives before the consumer has to do it for them—is general. The Quality Gate is one operationalization. There are others, and they should be built.
 
 ---
 
 ## 9. Using this yourself
 
-Everything in this post is methodology, not tooling. You do not need my setup to use it. Here is the minimum viable version of the Quality Gate.
+Everything in this post is methodology, not tooling—you do not need my setup to use it. Here is the minimum viable version of the Quality Gate.
 
 1. **Write the one-sentence claim before writing anything else.** *[Bug class] in [component] allows [attacker] to [cause failure] resulting in [consequence].* If you cannot fill all five slots with confirmed facts, stop.
 
@@ -606,13 +609,13 @@ The rubric and the checklist are designed to be project-agnostic. They work for 
 
 ---
 
-## 10. Related work
+## 10. Bibliographic notes
 
-The small set of references that earned a place in this post.
+The formal citation data is in the References section below. These notes group the sources by thread and mark the load-bearing citations.
 
-**Signaling theory.** Spence, M. (1973). ["Job Market Signaling."](https://www.sfu.ca/~allen/Spence.pdf) *QJE* 87(3). The page-358 "Critical Assumption" is the load-bearing citation in [§1](#1-the-slop-crisis-didnt-end-it-bifurcated).
+**Signaling theory.** Spence, M. (1973). ["Job Market Signaling."](https://www.sfu.ca/~allen/Spence.pdf) *QJE* 87(3). The page-358 "Critical Assumption" is the load-bearing citation in [§1](#1-the-slop-crisis-didnt-end-it-bifurcated). The entire structural argument rests on this passage.
 
-**April 2026 maintainer and policy discourse.** Stenberg [May 2025](https://www.linkedin.com/posts/danielstenberg_hackerone-curl-activity-7324820893862363136-glb1) ("DDoSed"), [April 2 Mastodon](https://mastodon.social/@bagder/116336957584445742), and [April 5 LinkedIn](https://www.linkedin.com/posts/danielstenberg_hackerone-activity-7446667043996725249-ZhEU/); [Willy Tarreau, LWN, March 31](https://lwn.net/Articles/1065620/); [Steven J. Vaughan-Nichols' *Register* interview with Greg Kroah-Hartman](https://www.theregister.com/2026/03/26/greg_kroahhartman_ai_kernel/); [Katie Moussouris, January 2026 LinkedIn](https://www.linkedin.com/posts/kmoussouris_bug-bountymd-we-stop-the-bug-bounty-end-activity-7419755161675440128-9RkH/) and [Iain Thomson's August 2025 *Register* interview](https://www.theregister.com/2025/08/24/bug_bounty_advice/); [Lorenzo Franceschi-Bicchierai, *TechCrunch*](https://techcrunch.com/2025/07/24/ai-slop-and-fake-reports-are-exhausting-some-security-bug-bounties/) (Ellis + Prins counterweight quotes from [§7](#7-limits-and-failure-modes)).
+**April 2026 maintainer and policy discourse.** Stenberg [May 2025](https://www.linkedin.com/posts/danielstenberg_hackerone-curl-activity-7324820893862363136-glb1) ("DDoSed"), [April 2 Mastodon](https://mastodon.social/@bagder/116336957584445742), and [April 5 LinkedIn](https://www.linkedin.com/posts/danielstenberg_hackerone-activity-7446667043996725249-ZhEU/); [Willy Tarreau, LWN, March 31](https://lwn.net/Articles/1065620/); [Steven J. Vaughan-Nichols' *Register* interview with Greg Kroah-Hartman](https://www.theregister.com/2026/03/26/greg_kroahhartman_ai_kernel/); [Katie Moussouris, January 2026 LinkedIn](https://www.linkedin.com/posts/kmoussouris_bug-bountymd-we-stop-the-bug-bounty-end-activity-7419755161675440128-9RkH/) and [Iain Thomson's August 2025 *Register* interview](https://www.theregister.com/2025/08/24/bug_bounty_advice/); [Lorenzo Franceschi-Bicchierai, *TechCrunch*](https://techcrunch.com/2025/07/24/ai-slop-and-fake-reports-are-exhausting-some-security-bug-bounties/) (Ellis and Prins counterweight quotes from [§7](#7-limits-and-failure-modes)).
 
 **Forward-looking AI vulnerability research discourse.** [Thomas Ptacek, "Vulnerability Research Is Cooked"](https://sockpuppet.org/blog/2026/03/30/vulnerability-research-is-cooked/); [Nicholas Carlini on *Security Cryptography Whatever*](https://securitycryptographywhatever.com/2026/03/25/ai-bug-finding/); the [Anthropic Frontier Red Team blog](https://red.anthropic.com/) read chronologically June 2025 → April 2026; [Project Glasswing](https://www.anthropic.com/glasswing); [Sean Heelan, o3 / CVE-2025-37899](https://sean.heelan.io/2025/05/22/how-i-used-o3-to-find-cve-2025-37899-a-remote-zeroday-vulnerability-in-the-linux-kernels-smb-implementation/); [Joshua Rogers, AI-assisted curl PRs](https://joshua.hu/llm-engineer-review-sast-security-ai-tools-pentesters); [Google Project Zero, "From Naptime to Big Sleep"](https://googleprojectzero.blogspot.com/2024/10/from-naptime-to-big-sleep.html).
 
@@ -622,7 +625,7 @@ The small set of references that earned a place in this post.
 
 *If you use this framework and find patterns I missed, I'd like to hear about them. The inflation checklist should grow over time as the community encounters new failure modes. Send me your version of [§4 entry 9](#9-letting-an-llm-write-your-evidence-section).*
 
-*— Eyitemi Egbejule ([@eeyitemi](https://x.com/eeyitemi)), April 8, 2026*
+*— Eyitemi Egbejule ([@eeyitemi](https://x.com/eeyitemi)), April 13, 2026*
 
 ---
 
@@ -645,4 +648,4 @@ These are the rules referenced in [§6.5](#65-ai-assisted-research-and-the-infla
 
 ## Methodology note
 
-This post was drafted with AI assistance (Claude Code) across two days and approximately fourteen hours of focused work. Every quotation was verified against its primary source. The `post-research-audit` skill described in [§6.5](#65-ai-assisted-research-and-the-inflation-pressure) was applied to drafts of this post itself. The argument is mine. The typing was collaborative.
+This post was drafted with AI assistance (Claude Code) across three days and approximately twenty hours of focused work. Every quotation was verified against its primary source. The `post-research-audit` skill described in [§6.5](#65-ai-assisted-research-and-the-inflation-pressure) was applied to drafts of this post itself. The argument is mine. The typing was collaborative.
